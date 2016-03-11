@@ -41,24 +41,31 @@
 
     - name: Get hadoop 
       get_url:
-        url=http://apache.mirrors.spacedump.net/hadoop/common/stable/hadoop-2.6.0.tar.gz 
+        url=http://mirror.switch.ch/mirror/apache/dist/hadoop/common/hadoop-2.7.2/hadoop-2.7.2.tar.gz 
         dest=/usr/local/ 
-        sha256sum=7a2ef6e7f468afcae95d0f7214816033c7e5c7982454061ccb117896d58d279f
 
     - name: unzip hadoop
-      unarchive: copy=no src=/usr/local/hadoop-2.6.0.tar.gz dest=/usr/local/ owner={{ hadoop_user }} group=hadoop
+      unarchive: 
+        copy=no 
+        src=/usr/local/hadoop-2.7.2.tar.gz 
+        dest=/usr/local/ 
+        owner={{ hadoop_user }} 
+        group=hadoop
 
     - name: set user and priviliges on hadoop
-      file: path=/usr/local/hadoop-2.6.0 owner={{ hadoop_user }} group=hadoop recurse=yes
+      file: path=/usr/local/hadoop-2.7.2 owner={{ hadoop_user }} group=hadoop recurse=yes
+
+    - name: make hadoop symlink
+      file: src=/usr/local/hadoop-2.7.2 dest=/usr/local/hadoop owner={{ hadoop_user }} group=hadoop state=link
 
     - name: distribute hadoop conf
-      template: src=templates/hadoop-env.sh.j2 dest=/usr/local/hadoop-2.6.0/etc/hadoop/hadoop-env.sh
+      template: src=templates/hadoop-env.sh.j2 dest=/usr/local/hadoop/etc/hadoop/hadoop-env.sh
 
     - name: distribute hadoop core-site.xml
-      template: src=templates/core-site.xml.j2 dest=/usr/local/hadoop-2.6.0/etc/hadoop/core-site.xml
+      template: src=templates/core-site.xml.j2 dest=/usr/local/hadoop/etc/hadoop/core-site.xml
 
     - name: distribute hadoop hdfs-site.xml
-      template: src=templates/hdfs-site.xml.j2 dest=/usr/local/hadoop-2.6.0/etc/hadoop/hdfs-site.xml
+      template: src=templates/hdfs-site.xml.j2 dest=/usr/local/hadoop/etc/hadoop/hdfs-site.xml
 
     # Setup ssh-setup for normal user and hadoop user    
     - name: deploy authorized keys
@@ -82,18 +89,29 @@
     # Spark stuff      
     - name: download spark
       get_url:
-        url=http://d3kbcqa49mib13.cloudfront.net/spark-1.2.1-bin-hadoop2.4.tgz 
-        dest=/opt/ 
-        sha256sum=8e618cf67b3090acf87119a96e5e2e20e51f6266c44468844c185122b492b454
- 
+        url=http://mirror.easyname.ch/apache/spark/spark-1.6.1/spark-1.6.1-bin-hadoop2.6.tgz  
+        dest=/usr/local 
+
     - name: unzip spark
-      unarchive: copy=no src=/opt/spark-1.2.1-bin-hadoop2.4.tgz dest=/opt
+      unarchive: 
+        copy=no 
+        src=/usr/local/spark-1.6.1-bin-hadoop2.6.tgz 
+        dest=/usr/local/
+        owner={{ hadoop_user }}
+        group=hadoop 
+        
+    - name: make spark symlink
+      file: 
+        src=/usr/local/spark-1.6.1-bin-hadoop2.6 
+        dest=/usr/local/spark state=link 
+        owner={{ hadoop_user }}
+        group=hadoop 
 
     - name: deploy slaves configuration
-      template: src=templates/slaves.j2 dest=/opt/spark-1.2.1-bin-hadoop2.4/conf/slaves 
+      template: src=templates/slaves.j2 dest=/usr/local/spark/conf/slaves 
 
     - name: deploy spark-env.sh configuration
-      template: src=templates/spark-env.sh.j2 dest=/opt/spark-1.2.1-bin-hadoop2.4/conf/spark-env.sh
+      template: src=templates/spark-env.sh.j2 dest=/usr/local/spark/conf/spark-env.sh owner={{ hadoop_user }} group=hadoop
 
 # --------------------------------------------------
 # Start the hadoop master
@@ -101,53 +119,57 @@
 - hosts: spark_masters
   vars_files:
     - vars/main.yml
+  become: yes
+  become_user: hadoop
 
 
   tasks:
+    - name: distribute hadoop masters file
+      template: src=templates/masters.j2 dest=/usr/local/hadoop/etc/hadoop/masters
+      
     - name: distribute hadoop slaves file
-      template: src=templates/masters.j2 dest=/usr/local/hadoop-2.6.0/etc/hadoop/masters
-
-    - name: distribute hadoop slaves file
-      template: src=templates/slaves.j2 dest=/usr/local/hadoop-2.6.0/etc/hadoop/slaves
-
+      template: src=templates/slaves.j2 dest=/usr/local/hadoop/etc/hadoop/slaves
+      
     - name: format hdfs (unless it's already been done)
-      command: /usr/local/hadoop-2.6.0/bin/hadoop namenode -format creates=/usr/local/hadoop-2.6.0/ansible-format-hdfs
+      command: /usr/local/hadoop/bin/hadoop namenode -format creates=/usr/local/hadoop/ansible-format-hdfs
    
     - name: touch hfds formatted file (indicates if hdfs has been formatted)
-      file: state=touch path=/usr/local/hadoop-2.6.0/ansible-format-hdfs
-
+      file: state=touch path=/usr/local/hadoop/ansible-format-hdfs
+      
     - name: add hadoop and spark binaries to path for hadoop user
       lineinfile:
         dest=/home/{{ hadoop_user }}/.bashrc 
         state=present insertafter=EOF 
-        line="export PATH=$PATH:/usr/local/hadoop-2.6.0/bin/:/opt/spark-1.2.1-bin-hadoop2.4/bin/"
+        line="export PATH=$PATH:/usr/local/hadoop/bin/:/usr/local/spark/bin/"
         create=true
       tags:
         - current
 
     - name: stop hadoop (if running)
-      command: /usr/local/hadoop-2.6.0/sbin/stop-dfs.sh
+      command: /usr/local/hadoop/sbin/stop-dfs.sh
 
     - name: start hadoop
-      command: /usr/local/hadoop-2.6.0/sbin/start-dfs.sh
+      command: /usr/local/hadoop/sbin/start-dfs.sh
 
 # --------------------------------------------------
 # Kick of spark (making the master start the slaves)
 # and configure spark-master as hadoop master
 # --------------------------------------------------
 - hosts: spark_masters
-
+  become: yes
+  become_user: hadoop
+  
   tasks:
 
     - name: stop spark master (if running)
-      command: /opt/spark-1.2.1-bin-hadoop2.4/sbin/stop-master.sh
+      command: /usr/local/spark/sbin/stop-master.sh
 
     - name: start spark master
-      shell: SPARK_MASTER_IP="{{ ansible_hostname }}" /opt/spark-1.2.1-bin-hadoop2.4/sbin/start-master.sh
+      shell: SPARK_MASTER_IP="{{ ansible_hostname }}" /usr/local/spark/sbin/start-master.sh
 
     - name: stop the slaves (if running)
-      shell: /opt/spark-1.2.1-bin-hadoop2.4/sbin/stop-slaves.sh
+      shell: /usr/local/spark/sbin/stop-slaves.sh
 
     - name: start the slaves
-      shell: /opt/spark-1.2.1-bin-hadoop2.4/sbin/start-slaves.sh
+      shell: /usr/local/spark/sbin/start-slaves.sh
 

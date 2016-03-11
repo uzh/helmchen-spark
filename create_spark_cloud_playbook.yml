@@ -6,13 +6,13 @@
     - vars/main.yml
   tasks:
   - name: Create a new spark master instance 
-    nova_compute:
+    os_server:
       state: "{{ instance_state }}"
       name: spark-master
-      image_id: 9bf957ba-a0ce-4513-ba8c-e80d42ea9faf
+      image: c18fe24e-210b-47d4-b347-4b0beff4ec50
       key_name: "{{ key_name }}"
-      wait_for: 200
-      flavor_id: 4
+      timeout: 200
+      flavor: 1cpu-4ram-hpc
       nics:
         - net-id: "{{ network_id }}"
       security_groups: spark,default
@@ -22,13 +22,13 @@
     register: spark_master
 
   - name: Create a new spark slaves
-    nova_compute:
+    os_server:
       state: "{{ instance_state }}"
       name: "{{ item }}"
-      image_id: 9bf957ba-a0ce-4513-ba8c-e80d42ea9faf
+      image: c18fe24e-210b-47d4-b347-4b0beff4ec50
       key_name: "{{ key_name }}"
-      wait_for: 200
-      flavor_id: 4
+      timeout: 200
+      flavor: 1cpu-4ram-hpc
       nics:
         - net-id: "{{ network_id }}"
       security_groups: spark,default
@@ -37,6 +37,6 @@
         ansible_host_groups: spark_slaves,default
     register: spark_slaves
     with_sequence: 
-      start=0
+      start=1
       end="{{ nbr_of_slaves }}"
       format=spark-slave%02x

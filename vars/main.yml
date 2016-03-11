@@ -3,28 +3,29 @@
 instance_state: present
 
 # Number of workers to spawn in the cluster
-nbr_of_slaves: 3
+nbr_of_slaves: 2
 
 # The name of the key pair you will use to log in
 # as set in OpenStack (see the OpenStack security dashboard)
-key_name: cloud_key
+key_name: neurospark
 
 # Id of the network to run in (can be found in the OpenStack
 # dashboard)
-network_id: b045a7de-5aa4-43a2-86ff-049fd1ba1884
+network_id: c86b320c-9542-4032-a951-c8a068894cc2
 
 # This is the ssh-key which will be distritbuted 
 # across the cluster. It' important that this key
 # does NOT use password protection
-ssh_keys_to_use: files/cloud.key
-ssh_public_key: files/cloud.key.pub
+ssh_keys_to_use: files/spark-nodes.key
+ssh_public_key: files/spark-nodes.key.pub
 # This is a ugly hack - but you have to give the
 # file name of the ssh-key your referencing above
-name_of_ssh_key: cloud.key
+name_of_ssh_key: spark-nodes.key
 
 # Name of the user used to install everything
 # on the remote systems
 user: ubuntu
 
 # Name of hadoop user
-hadoop_user: ubuntu
+hadoop_user: hadoop
+
