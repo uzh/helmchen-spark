@@ -3,7 +3,7 @@
 instance_state: present
 
 # Number of workers to spawn in the cluster
-nbr_of_slaves: 2
+nbr_of_slaves: 4
 
 # The name of the key pair you will use to log in
 # as set in OpenStack (see the OpenStack security dashboard)
@@ -28,4 +28,8 @@ user: ubuntu
 
 # Name of hadoop user
 hadoop_user: hadoop
+
+# make sure we are ssh-ing as the ubuntu user -- this is
+# important when running playbooks remotely
+ansible_user: ubuntu 
 

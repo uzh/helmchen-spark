@@ -7,6 +7,7 @@
 
   vars:
     ssh_public_key_content: "{{ lookup('file', ssh_public_key ) }}"
+  
   vars_files:
     - vars/main.yml
  
@@ -28,6 +29,9 @@
  
     - name: disable net.ipv6.conf.lo.disable_ipv6
       sysctl: name=net.ipv6.conf.lo.disable_ipv6 value=1 state=present
+
+    - name: Display all variables/facts known for a host
+      debug: var=hostvars[inventory_hostname]['ansible_eth0']
 
     - name: distribute host file
       template: src=templates/hosts.j2 dest=/etc/hosts
@@ -117,6 +121,7 @@
 # Start the hadoop master
 # --------------------------------------------------
 - hosts: spark_masters
+
   vars_files:
     - vars/main.yml
   become: yes
@@ -156,6 +161,10 @@
 # and configure spark-master as hadoop master
 # --------------------------------------------------
 - hosts: spark_masters
+  
+  vars_files:
+    - vars/main.yml
+  
   become: yes
   become_user: hadoop
   

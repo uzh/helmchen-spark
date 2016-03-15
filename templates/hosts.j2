@@ -1,8 +1,7 @@
 127.0.0.1 localhost
-{{ ansible_eth0.ipv4.address }}  {{ ansible_hostname }}
 
 {% for host in groups['all'] %}
-{{ hostvars[host].ansible_eth0.ipv4.address }}  {{ hostvars[host].ansible_hostname }}
+{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}  {{ hostvars[host].ansible_hostname }}
 {% endfor %}
 
 # The following lines are desirable for IPv6 capable hosts
