@@ -33,3 +33,7 @@ hadoop_user: hadoop
 # important when running playbooks remotely
 ansible_user: ubuntu 
 
+core_user_list: 
+  - "{{ user }}"
+  - "{{ hadoop_user }}"
+  
