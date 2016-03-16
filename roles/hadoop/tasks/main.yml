@@ -1,12 +1,6 @@
 ---
 # Install hadoop
 - block:
-  - name: create hadoop group
-    group: name=hadoop state=present
-
-  - name: create hadoop user
-    user: name={{ hadoop_user }} comment="Hadoop user" group=hadoop shell=/bin/bash
-
   - name: Get hadoop 
     get_url:
       url=http://mirror.switch.ch/mirror/apache/dist/hadoop/common/hadoop-{{ hadoop_version }}/hadoop-{{ hadoop_version }}.tar.gz 
