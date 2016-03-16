@@ -1,6 +1,3 @@
 [submodule "library/ansible-conda"]
 	path = library/ansible-conda
 	url = git@github.com:UDST/ansible-conda.git
-[submodule "roles/miniconda"]
-	path = roles/miniconda
-	url = git@github.com:rokroskar/ansible-miniconda.git
