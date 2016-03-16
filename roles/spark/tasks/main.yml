@@ -1,0 +1,35 @@
+---
+# Spark stuff
+- block: 
+  - name: download spark
+    get_url:
+      url=http://mirror.easyname.ch/apache/spark/spark-1.6.1/spark-1.6.1-bin-hadoop2.6.tgz  
+      dest=/usr/local/spark-1.6.1-bin-hadoop2.6.tgz
+
+  - name: unzip spark
+    unarchive: 
+      copy=no 
+      src=/usr/local/spark-1.6.1-bin-hadoop2.6.tgz 
+      dest=/usr/local/
+      owner={{ hadoop_user }}
+      group=hadoop 
+    
+  - name: make spark symlink
+    file: 
+      src=/usr/local/spark-1.6.1-bin-hadoop2.6 
+      dest=/usr/local/spark state=link 
+      owner={{ hadoop_user }}
+      group=hadoop 
+
+  tags:
+    - downloads
+
+- block: 
+  - name: deploy slaves configuration
+    template: src=templates/slaves.j2 dest=/usr/local/spark/conf/slaves 
+
+  - name: deploy spark-env.sh configuration
+    template: src=templates/spark-env.sh.j2 dest=/usr/local/spark/conf/spark-env.sh owner={{ hadoop_user }} group=hadoop
+  
+  tags: 
+    - configuration

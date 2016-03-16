@@ -1,0 +1,28 @@
+---
+- name: install spark standalone with HDFS 
+  hosts: all
+  become: yes
+  become_user: root
+
+  vars:
+    ssh_public_key_content: "{{ lookup('file', ssh_public_key ) }}"
+   
+  pre_tasks:
+    - name: Update APT cache
+      apt: update_cache=yes
+
+  roles: 
+    - common
+    - {role: hadoop, tags: hadoop}
+    - {role: spark, tags: spark}
+
+- name: start spark and hadoop services
+  hosts: spark_masters
+  become: yes
+  become_user: hadoop
+  tags: 
+    - start-service
+
+  roles:
+    - {role: hadoop_master, tags: ['hadoop', 'start-hadoop']}
+    - {role: spark_master, tags: ['spark', 'start-spark']}

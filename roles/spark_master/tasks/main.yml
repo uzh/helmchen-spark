@@ -1,0 +1,14 @@
+---
+- block:
+  - name: stop spark master (if running)
+    command: /usr/local/spark/sbin/stop-master.sh
+
+  - name: start spark master
+    shell: SPARK_MASTER_IP="{{ ansible_hostname }}" /usr/local/spark/sbin/start-master.sh
+
+  - name: stop the slaves (if running)
+    shell: /usr/local/spark/sbin/stop-slaves.sh
+
+  - name: start the slaves
+    shell: /usr/local/spark/sbin/start-slaves.sh
+

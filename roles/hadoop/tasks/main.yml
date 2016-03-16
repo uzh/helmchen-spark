@@ -1,0 +1,50 @@
+---
+# Install hadoop
+- block:
+  - name: create hadoop group
+    group: name=hadoop state=present
+
+  - name: create hadoop user
+    user: name={{ hadoop_user }} comment="Hadoop user" group=hadoop shell=/bin/bash
+
+  - name: Get hadoop 
+    get_url:
+      url=http://mirror.switch.ch/mirror/apache/dist/hadoop/common/hadoop-{{ hadoop_version }}/hadoop-{{ hadoop_version }}.tar.gz 
+      dest=/usr/local/hadoop-{{ hadoop_version }}.tar.gz
+
+  - name: unzip hadoop
+    unarchive: 
+      copy=no 
+      src=/usr/local/hadoop-{{ hadoop_version }}.tar.gz 
+      dest=/usr/local/
+      owner={{ hadoop_user }} 
+      group=hadoop
+      creates=/usr/local/hadoop-{{ hadoop_version }}
+
+  - name: set user and priviliges on hadoop
+    file: path=/usr/local/hadoop-{{ hadoop_version }} owner={{ hadoop_user }} group=hadoop recurse=yes
+
+  - name: make hadoop symlink
+    file: src=/usr/local/hadoop-{{ hadoop_version }} dest=/usr/local/hadoop owner={{ hadoop_user }} group=hadoop state=link
+
+  tags: 
+    - downloads
+
+- block: 
+  - name: distribute hadoop conf
+    template: src=hadoop-env.sh.j2 dest=/usr/local/hadoop/etc/hadoop/hadoop-env.sh
+
+  - name: distribute hadoop core-site.xml
+    template: src=core-site.xml.j2 dest=/usr/local/hadoop/etc/hadoop/core-site.xml
+
+  - name: distribute hadoop hdfs-site.xml
+    template: src=hdfs-site.xml.j2 dest=/usr/local/hadoop/etc/hadoop/hdfs-site.xml
+
+  - name: distribute hadoop masters file
+    template: src=masters.j2 dest=/usr/local/hadoop/etc/hadoop/masters
+  
+  - name: distribute hadoop slaves file
+    template: src=slaves.j2 dest=/usr/local/hadoop/etc/hadoop/slaves
+  
+  tags:
+    - configuration
