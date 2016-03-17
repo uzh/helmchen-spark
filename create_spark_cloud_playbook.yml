@@ -12,7 +12,7 @@
       image: c18fe24e-210b-47d4-b347-4b0beff4ec50
       key_name: "{{ key_name }}"
       timeout: 200
-      flavor: 1cpu-4ram-hpc
+      flavor: "{{ vm_flavor }}"
       nics:
         - net-id: "{{ network_id }}"
       security_groups: spark,default
@@ -28,7 +28,7 @@
       image: c18fe24e-210b-47d4-b347-4b0beff4ec50
       key_name: "{{ key_name }}"
       timeout: 200
-      flavor: 1cpu-4ram-hpc
+      flavor: "{{ vm_flavor }}"
       nics:
         - net-id: "{{ network_id }}"
       security_groups: spark,default

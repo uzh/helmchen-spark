@@ -11,6 +11,9 @@ instance_state: present
 # Number of workers to spawn in the cluster
 nbr_of_slaves: 4
 
+# VM flavor
+vm_flavor: 1cpu-4ram-hpc
+
 # The name of the key pair you will use to log in
 # as set in OpenStack (see the OpenStack security dashboard)
 key_name: neurospark

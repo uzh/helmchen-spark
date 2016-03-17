@@ -3,20 +3,21 @@
 - block: 
   - name: download spark
     get_url:
-      url=http://mirror.easyname.ch/apache/spark/spark-1.6.1/spark-1.6.1-bin-hadoop2.6.tgz  
-      dest=/usr/local/spark-1.6.1-bin-hadoop2.6.tgz
+      url=http://mirror.easyname.ch/apache/spark/spark-{{spark_version}}/spark-{{spark_version}}-bin-hadoop2.6.tgz  
+      dest=/usr/local/spark-{{spark_version}}-bin-hadoop2.6.tgz
 
   - name: unzip spark
     unarchive: 
       copy=no 
-      src=/usr/local/spark-1.6.1-bin-hadoop2.6.tgz 
+      src=/usr/local/spark-{{spark_version}}-bin-hadoop2.6.tgz 
       dest=/usr/local/
       owner={{ hadoop_user }}
       group=hadoop 
+      creates=/usr/local/spark-{{spark_version}}-bin-hadoop2
     
   - name: make spark symlink
     file: 
-      src=/usr/local/spark-1.6.1-bin-hadoop2.6 
+      src=/usr/local/spark-{{spark_version}}-bin-hadoop2.6 
       dest=/usr/local/spark state=link 
       owner={{ hadoop_user }}
       group=hadoop 

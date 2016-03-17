@@ -1,4 +1,7 @@
 ---
+#
+# Installing spark and hadoop
+#
 - name: install spark standalone with HDFS 
   hosts: all
   become: yes
@@ -16,13 +19,39 @@
     - {role: hadoop, tags: hadoop}
     - {role: spark, tags: spark}
 
+#
+# Python installation and dependencies
+#
+- name: configure python
+  hosts: all
+  become: yes
+  become_user: root
+  environment:
+    PATH: "/usr/local/miniconda/bin:{{ ansible_env.PATH }}"
+
+  roles: 
+    - {role: miniconda, tags: miniconda}
+    - {role: thunder, tags: thunder}
+  tags: python
+
+#
+# Starting up spark, hadoop, and jupyterhub
+# 
+# Note: we do this after the python installation because we want to 
+# use the custom python installed above instead of system python
+#
 - name: start spark and hadoop services
   hosts: spark_masters
   become: yes
   become_user: hadoop
-  tags: 
-    - start-service
-
+  environment:
+    PATH: "/usr/local/miniconda/bin:{{ ansible_env.PATH }}"
+    PYSPARK_PYTHON: "/usr/local/miniconda/bin/python"
+  
   roles:
     - {role: hadoop_master, tags: ['hadoop', 'start-hadoop']}
     - {role: spark_master, tags: ['spark', 'start-spark']}
+    - {role: jupyterhub, tags: jupyterhub, become: yes, become_user: root}
+
+  tags: 
+    - start-service    
