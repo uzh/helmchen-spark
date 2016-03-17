@@ -1,0 +1,10 @@
+---
+jupyterhub_port: 9000
+
+jupyterhub_cert: jhub.cert
+
+jupyterhub_key: jhub.key
+
+jupyterhub_admin_users: ["'rok'"]
+
+

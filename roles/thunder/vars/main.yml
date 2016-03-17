@@ -1,0 +1,11 @@
+---
+# python libraries to install via conda
+python_libs: 
+    - numpy
+    - scipy
+    - ipython
+    - jupyter
+    - scikit-learn
+    - scikit-image
+    - matplotlib
+    - ipykernel

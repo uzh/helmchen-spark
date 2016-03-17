@@ -1,0 +1,27 @@
+---
+# install jupyterhub
+
+- name: install npm
+  apt: name=npm state=present
+
+- name: install http proxy
+  shell: "npm install -g configurable-http-proxy"
+
+- name: install jupyterhub 
+  pip: name=jupyterhub state=latest executable="/usr/local/miniconda/envs/python35/bin/pip"
+
+- name: make jupyterhub directory
+  file: path=/usr/local/jupyterhub state=directory owner=root group=root
+
+- name: create jupyterhub configuration
+  template: dest=/usr/local/jupyterhub/jupyterhub_config.py src=templates/jupyterhub_config.py.j2 owner=root group=root 
+
+- name: make ssl certs
+  shell: openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /usr/local/jupyterhub/{{jupyterhub_key}} -out /usr/local/jupyterhub/{{jupyterhub_cert}} -batch
+  args: 
+    creates=/usr/local/jupyterhub/{{jupyterhub_key}}
+
+- name: start jupyterhub
+  shell: /usr/local/miniconda/envs/python35/bin/jupyterhub
+  args:
+    chdir: /usr/local/jupyterhub
