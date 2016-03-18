@@ -7,4 +7,5 @@ jupyterhub_key: jhub.key
 
 jupyterhub_admin_users: ["'rok'"]
 
+jupyterhub_dir: /usr/local/jupyterhub
 

@@ -1,0 +1,8 @@
+---
+- name: restart jupyterhub
+  supervisorctl: config=/etc/supervisord/supervisord.conf name=jupyterhub state=restarted
+
+- name: restart supervisord
+  service: name=supervisor state=restarted
+
+  

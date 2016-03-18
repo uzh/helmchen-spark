@@ -1,0 +1,10 @@
+---
+- name: install supervisord
+  apt: name=supervisor state=present
+
+- name: deploy supervisord configuration
+  template: src=templates/supervisord.conf.j2 dest=/etc/supervisor/supervisord.conf owner=root group=root
+  notify: restart supervisor
+
+- name: start supervisord
+  service: name=supervisor state=started
