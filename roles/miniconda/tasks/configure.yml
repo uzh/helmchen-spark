@@ -1,0 +1,26 @@
+---
+# necessary steps to configure the role
+  
+- name: add miniconda to the PATH
+  vars: 
+    superusers:
+      - root
+    
+  become: yes
+  become_user: "{{ item }}"
+  lineinfile:
+    dest: ~/.bashrc
+    line: export PATH={{ miniconda_home }}/bin:$PATH
+    state: present
+  when: miniconda_modify_path
+  with_items: 
+    - "{{core_user_list}}"
+    - "{{ superusers }}"
+
+- name: update packages
+  shell: "{{ miniconda_home }}/bin/conda create --yes -q -n {{ item.name }} python={{ item.python_version }} {{ item.pkgs }}"
+  args: 
+    creates: "{{ miniconda_home }}/envs/{{ item.name }}"
+  when: miniconda_installed | success
+  with_items: "{{ miniconda_environments }}"
+

@@ -1,0 +1,18 @@
+---
+# Main configuration
+# -------------------
+
+miniconda_url: >
+  https://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh
+
+miniconda_home: '/usr/local/miniconda'
+
+miniconda_environments:
+  - name: python35
+    python_version: 3.5
+    pkgs: 'pip numpy scipy matplotlib ipython jupyter ipykernel'
+
+
+miniconda_modify_path: yes
+
+miniconda_add_condarc: no
