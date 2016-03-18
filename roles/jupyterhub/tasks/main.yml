@@ -4,6 +4,9 @@
 - name: install npm
   apt: name=npm state=present
 
+- name: install node-js
+  apt: name=nodejs-legacy state=present
+
 - name: install http proxy
   shell: "npm install -g configurable-http-proxy"
 
@@ -22,6 +25,9 @@
     creates=/usr/local/jupyterhub/{{jupyterhub_key}}
 
 - name: start jupyterhub
-  shell: /usr/local/miniconda/envs/python35/bin/jupyterhub
+  shell: /usr/local/miniconda/envs/python35/bin/jupyterhub >> jupyterhub.out 
   args:
     chdir: /usr/local/jupyterhub
+  async: 1000
+  poll: 0
+

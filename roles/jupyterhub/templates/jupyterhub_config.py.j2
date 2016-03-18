@@ -72,7 +72,7 @@
 # c.JupyterHub.cookie_secret_file = 'jupyterhub_cookie_secret'
 
 # The location of jupyterhub data files (e.g. /usr/local/share/jupyter/hub)
-c.JupyterHub.data_files_path = '/Users/rok/miniconda/envs/py35/share/jupyter/hub'
+c.JupyterHub.data_files_path = '/usr/local/miniconda/envs/python35/share/jupyter/hub'
 
 # url for the database. e.g. `sqlite:///jupyterhub.sqlite`
 # c.JupyterHub.db_url = 'sqlite:///jupyterhub.sqlite'
@@ -81,7 +81,7 @@ c.JupyterHub.data_files_path = '/Users/rok/miniconda/envs/py35/share/jupyter/hub
 # c.JupyterHub.generate_config = False
 
 # The ip for this process
-# c.JupyterHub.hub_ip = '127.0.0.1'
+c.JupyterHub.hub_ip = '{{ansible_default_ipv4['address']}}'
 
 # The port for this process
 c.JupyterHub.hub_port = {{ jupyterhub_port }}

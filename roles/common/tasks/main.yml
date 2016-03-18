@@ -53,9 +53,9 @@
       create=true
     with_items: "{{core_user_list}}"
   
-  #############
-  # TO-DO: create user accounts and inject other keys
-  #############
+  - name: create user accounts
+    user: name={{ item.key }} group=hadoop append=yes password={{ item.value }}
+    with_dict: "{{ user_passwords }}"
 
   tags:
     - user-accounts

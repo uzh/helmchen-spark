@@ -51,7 +51,7 @@
   roles:
     - {role: hadoop_master, tags: ['hadoop', 'start-hadoop']}
     - {role: spark_master, tags: ['spark', 'start-spark']}
-    - {role: jupyterhub, tags: jupyterhub, become: yes, become_user: root}
+    - {role: jupyterhub, tags: jupyterhub, become: yes, become_user: root, environment: {PATH: "/usr/local/miniconda/envs/python35/bin:{{ ansible_env.PATH }}"}}
 
   tags: 
     - start-service    
