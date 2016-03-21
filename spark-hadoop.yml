@@ -17,7 +17,7 @@
   roles: 
     - common
     - {role: hadoop, tags: hadoop}
-    - {role: spark, tags: spark}
+    - {role: spark, tags: spark, environment: {PATH: "/usr/local/miniconda/bin:{{ ansible_env.PATH }}"}}
 
 #
 # Python installation and dependencies

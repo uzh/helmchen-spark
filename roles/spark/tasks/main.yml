@@ -34,3 +34,18 @@
   
   tags: 
     - configuration
+
+- name: install findspark
+  pip: name=findspark state=present
+
+- name: add spark environment variables to bashrc
+  lineinfile:
+    dest=~/.bashrc 
+    state=present insertafter=EOF 
+    line="export SPARK_HOME=/usr/local/spark; export PYSPARK_PYTHON=/usr/local/miniconda/bin/python"
+    create=true
+  with_items: 
+    - "{{ core_user_list }}"
+    - "{{ users }}"
+    - "root"
+  

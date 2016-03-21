@@ -46,3 +46,5 @@ core_user_list:
   - "{{ user }}"
   - "{{ hadoop_user }}"
   
+users: ['rok', 'henry']
+

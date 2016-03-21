@@ -51,10 +51,18 @@
       state=present insertafter=EOF 
       line="export PATH=$PATH:/usr/local/hadoop/bin/:/usr/local/spark/bin/"
       create=true
-    with_items: "{{core_user_list}}"
+    with_items: 
+      - "{{ core_user_list }}"
+      - "{{ users }}"
   
   - name: create user accounts
     user: name={{ item.key }} group=hadoop append=yes password={{ item.value }}
+    with_dict: "{{ user_passwords }}"
+
+  - name: inject user public keys
+    authorized_key: 
+      user: "{{ item.key }}"
+      key: "{{ lookup('file', 'roles/common/files/{{ item.key }}.key.pub') }}"
     with_dict: "{{ user_passwords }}"
 
   tags:

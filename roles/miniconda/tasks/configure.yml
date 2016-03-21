@@ -16,6 +16,7 @@
   with_items: 
     - "{{core_user_list}}"
     - "{{ superusers }}"
+    - "{{ users }}"
 
 - name: update packages
   shell: "{{ miniconda_home }}/bin/conda create --yes -q -n {{ item.name }} python={{ item.python_version }} {{ item.pkgs }}"

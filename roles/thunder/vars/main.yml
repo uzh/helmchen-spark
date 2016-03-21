@@ -9,3 +9,4 @@ python_libs:
     - scikit-image
     - matplotlib
     - ipykernel
+    - seaborn

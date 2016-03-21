@@ -25,13 +25,19 @@
   args: 
     creates: /usr/local/jupyterhub/{{jupyterhub_key}}
 
-- name: create supervisord configuration file
+- name: create jupyterhub supervisord configuration file
   template: 
     src: templates/jupyterhub_supervisord.conf.j2 
     dest: /etc/supervisor/conf.d/jupyterhub_supervisord.conf
     owner: root 
     group: root
   notify: restart supervisor
+
+- name: register the python 2 kernel
+  shell: "/usr/local/miniconda/bin/python -m ipykernel install"
+
+- name: register the python 3 kernel
+  shell: "/usr/local/miniconda/envs/python35/bin/python -m ipykernel install"
 
 - name: start jupyterhub
   supervisorctl: name=jupyterhub state=started config=/etc/supervisor/supervisord.conf

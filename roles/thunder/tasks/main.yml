@@ -1,15 +1,14 @@
 ---
 # install thunder and related packages
 
+- name: copy example notebooks and data
+  copy: src=files/thunder_notebooks dest=/home/{{item}} owner={{item}} group=hadoop 
+  with_items: 
+    - "{{users}}"
+
 - name: install conda dependencies
   conda: name={{item}} state=latest
   with_items: "{{ python_libs }}"
 
 - name: install thunder
-  pip: name=thunder
-
-- name: register the python 2 kernel
-  shell: "/usr/local/miniconda/bin/python -m ipykernel install"
-
-- name: register the python 3 kernel
-  shell: "/usr/local/miniconda/envs/python35/bin/python -m ipykernel install"
+  pip: name=thunder-python
