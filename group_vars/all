@@ -60,5 +60,5 @@ hdfs_reformat: false
 hadoop_tmp_dir: /hadoop
 
 # hadoop configuration directory
-hadoop_conf_dir: /etc/hadoop/hadoop.conf
+hadoop_conf_dir: /usr/local/hadoop/etc/hadoop
 
