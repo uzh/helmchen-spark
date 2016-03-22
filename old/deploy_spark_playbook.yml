@@ -70,19 +70,19 @@
 
     - block: 
       - name: distribute hadoop conf
-        template: src=templates/hadoop-env.sh.j2 dest=/usr/local/hadoop/etc/hadoop/hadoop-env.sh
+        template: src=templates/hadoop-env.sh.j2 dest={{ hadoop_conf_dir }}/hadoop-env.sh
 
       - name: distribute hadoop core-site.xml
-        template: src=templates/core-site.xml.j2 dest=/usr/local/hadoop/etc/hadoop/core-site.xml
+        template: src=templates/core-site.xml.j2 dest={{ hadoop_conf_dir }}/core-site.xml
 
       - name: distribute hadoop hdfs-site.xml
-        template: src=templates/hdfs-site.xml.j2 dest=/usr/local/hadoop/etc/hadoop/hdfs-site.xml
+        template: src=templates/hdfs-site.xml.j2 dest={{ hadoop_conf_dir }}/hdfs-site.xml
 
       - name: distribute hadoop masters file
-        template: src=templates/masters.j2 dest=/usr/local/hadoop/etc/hadoop/masters
+        template: src=templates/masters.j2 dest={{ hadoop_conf_dir }}/masters
       
       - name: distribute hadoop slaves file
-        template: src=templates/slaves.j2 dest=/usr/local/hadoop/etc/hadoop/slaves
+        template: src=templates/slaves.j2 dest={{ hadoop_conf_dir }}/slaves
       
       tags:
         - configuration

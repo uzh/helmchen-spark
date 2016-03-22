@@ -1,13 +1,27 @@
 ---
-- name: stop spark master (if running)
-  command: /usr/local/spark/sbin/stop-master.sh
+- name: create spark supervisord configuration file
+  template: 
+    src: templates/spark_supervisord.conf.j2 
+    dest: /etc/supervisor/conf.d/spark_supervisord.conf
+    owner: root 
+    group: root
+  become: yes
+  become_user: root
+  notify: restart supervisor
+  tags: configuration
 
-- name: start spark master
-  shell: SPARK_MASTER_IP="{{ ansible_hostname }}" /usr/local/spark/sbin/start-master.sh
+- block:
+  - name: stop spark master (if running)
+    command: /usr/local/spark/sbin/stop-master.sh
 
-- name: stop the slaves (if running)
-  shell: /usr/local/spark/sbin/stop-slaves.sh
+  - name: start spark master
+    shell: SPARK_MASTER_IP="{{ ansible_hostname }}" /usr/local/spark/sbin/start-master.sh
 
-- name: start the slaves
-  shell: /usr/local/spark/sbin/start-slaves.sh
+  - name: stop the slaves (if running)
+    shell: /usr/local/spark/sbin/stop-slaves.sh
+
+  - name: start the slaves
+    shell: /usr/local/spark/sbin/start-slaves.sh
+
+  tags: start-service
 

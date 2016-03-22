@@ -1,0 +1,31 @@
+---
+- name: create spark supervisord configuration file
+  template: 
+    src: templates/spark_supervisord.conf.j2 
+    dest: /etc/supervisor/conf.d/spark_supervisord.conf
+    owner: root 
+    group: root
+  become: yes
+  become_user: root
+  tags: configuration
+
+- name: reload supervisor
+  become: yes
+  become_user: root
+  command: supervisorctl reread
+
+- block:
+  - name: start spark master
+    become: yes
+    become_user: root
+    supervisorctl: name=spark_master state=started config=/etc/supervisor/supervisord.conf
+    when: inventory_hostname in groups['spark_masters']
+
+  - name: start spark slaves
+    become: yes
+    become_user: root
+    supervisorctl: name=spark_worker state=restarted config=/etc/supervisor/supervisord.conf
+    when: inventory_hostname in groups['spark_slaves']
+
+  tags: start-service
+

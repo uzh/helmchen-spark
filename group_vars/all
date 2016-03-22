@@ -59,3 +59,6 @@ hdfs_reformat: false
 # such as HDFS blocks, user data, mapreduce temporary data etc. goes
 hadoop_tmp_dir: /hadoop
 
+# hadoop configuration directory
+hadoop_conf_dir: /etc/hadoop/hadoop.conf
+

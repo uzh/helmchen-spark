@@ -1,11 +1,9 @@
 ---
-- name: format hdfs
-  command: /usr/local/hadoop/bin/hadoop namenode -format -force -nonInteractive
-  when: hdfs_reformat
-  tags: 
-    - start-service
-
 - block:
+  - name: format hdfs
+    command: /usr/bin/hadoop namenode -format -force -nonInteractive
+    when: hdfs_reformat
+
   - name: stop hadoop (if running)
     command: /usr/local/hadoop/sbin/stop-dfs.sh
 

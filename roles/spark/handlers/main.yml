@@ -1,0 +1,12 @@
+---
+- name: restart spark master
+  become: yes
+  become_user: root
+  supervisorctl: name=spark_master state=restared config=/etc/supervisor/supervisord.conf
+  when: inventory_hostname == "{{ groups['spark_masters'][0] }}"
+
+- name: restart spark slaves
+  become: yes
+  become_user: root
+  supervisorctl: name=spark_worker state=restarted config=/etc/supervisor/supervisord.conf
+  when: inventory_hostname in groups['spark_slaves']

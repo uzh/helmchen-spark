@@ -1,11 +1,13 @@
 ---
 #
-# Installing spark and hadoop
+# Install basic packages and python
 #
-- name: install spark standalone with HDFS 
+- name: install basic packages, python, and thunder
   hosts: all
   become: yes
   become_user: root
+  #environment: 
+  #  PATH: "/usr/local/miniconda/bin:{{ (ansible_env|default({})).PATH|default('') }}"
 
   vars:
     ssh_public_key_content: "{{ lookup('file', ssh_public_key ) }}"
@@ -16,23 +18,27 @@
 
   roles: 
     - common
-    - {role: hadoop, tags: hadoop}
-    - {role: spark, tags: spark, environment: {PATH: "/usr/local/miniconda/bin:{{ ansible_env.PATH }}"}}
-
-#
-# Python installation and dependencies
-#
-- name: configure python
-  hosts: all
-  become: yes
-  become_user: root
-  environment:
-    PATH: "/usr/local/miniconda/bin:{{ ansible_env.PATH }}"
-
-  roles: 
+    - {role: supervisord, tags: supervisor}
     - {role: miniconda, tags: miniconda}
     - {role: thunder, tags: thunder}
-  tags: python
+
+    # - {role: hadoop, tags: hadoop}
+    # - {role: spark, tags: spark, environment: {PATH: "/usr/local/miniconda/bin:{{ ansible_env.PATH }}"}}
+
+# # #
+# # # Python installation and dependencies
+# # #
+# # - name: configure python
+# #   hosts: all
+# #   become: yes
+# #   become_user: root
+# #   environment:
+#     PATH: "/usr/local/miniconda/bin:{{ ansible_env.PATH }}"
+
+#   roles: 
+#     - {role: miniconda, tags: miniconda}
+#     - {role: thunder, tags: thunder}
+#   tags: python
 
 #
 # Starting up spark, hadoop, and jupyterhub
@@ -40,8 +46,8 @@
 # Note: we do this after the python installation because we want to 
 # use the custom python installed above instead of system python
 #
-- name: start spark and hadoop services
-  hosts: spark_masters
+- name: install and deploy spark and hdfs
+  hosts: all
   become: yes
   become_user: hadoop
   environment:
@@ -49,10 +55,7 @@
     PYSPARK_PYTHON: "/usr/local/miniconda/bin/python"
   
   roles:
-    - {role: supervisord, tags: supervisor, become: yes, become_user: root}
-    - {role: hadoop_master, tags: ['hadoop', 'start-hadoop']}
-    - {role: spark_master, tags: ['spark', 'start-spark']}
-    - {role: jupyterhub, tags: jupyterhub, become: yes, become_user: root, environment: {PATH: "/usr/local/miniconda/envs/python35/bin:{{ ansible_env.PATH }}"}}
-
-  tags: 
-    - start-service    
+    - {role: spark, tags: spark}   
+#    - {role: hadoop_master, tags: ['hadoop', 'start-hadoop']}
+#    - {role: spark_master, tags: ['spark', 'start-spark']}
+#    - {role: jupyterhub, tags: jupyterhub, become: yes, become_user: root, environment: {PATH: "/usr/local/miniconda/envs/python35/bin:{{ ansible_env.PATH }}"}}
