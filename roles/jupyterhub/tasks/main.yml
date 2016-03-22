@@ -1,43 +1,50 @@
 ---
 # install jupyterhub
 
-- name: install npm
-  apt: name=npm state=present
+- block:
+  - name: install npm
+    apt: name=npm state=present
 
-- name: install node-js
-  apt: name=nodejs-legacy state=present
+  - name: install node-js
+    apt: name=nodejs-legacy state=present
 
-- name: install http proxy
-  shell: "npm install -g configurable-http-proxy"
+  - name: install http proxy
+    shell: "npm install -g configurable-http-proxy"
 
-- name: install jupyterhub 
-  pip: name=jupyterhub state=latest executable="/usr/local/miniconda/envs/python35/bin/pip"
+  - name: install jupyterhub 
+    pip: name=jupyterhub state=latest executable="/usr/local/miniconda/envs/python35/bin/pip"
 
-- name: make jupyterhub directory
-  file: path=/usr/local/jupyterhub state=directory owner=root group=root
+  tags: dowloads
 
-- name: create jupyterhub configuration
-  template: dest=/usr/local/jupyterhub/jupyterhub_config.py src=templates/jupyterhub_config.py.j2 owner=root group=root 
-  notify: restart jupyterhub
+- block: 
+  - name: make jupyterhub directory
+    file: path=/usr/local/jupyterhub state=directory owner=root group=root
 
-- name: make ssl certs
-  shell: openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /usr/local/jupyterhub/{{jupyterhub_key}} -out /usr/local/jupyterhub/{{jupyterhub_cert}} -batch
-  args: 
-    creates: /usr/local/jupyterhub/{{jupyterhub_key}}
+  - name: create jupyterhub configuration
+    template: dest=/usr/local/jupyterhub/jupyterhub_config.py src=templates/jupyterhub_config.py.j2 owner=root group=root 
+    notify: restart jupyterhub
 
-- name: create jupyterhub supervisord configuration file
-  template: 
-    src: templates/jupyterhub_supervisord.conf.j2 
-    dest: /etc/supervisor/conf.d/jupyterhub_supervisord.conf
-    owner: root 
-    group: root
-  notify: restart supervisor
+  - name: make ssl certs
+    shell: openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /usr/local/jupyterhub/{{jupyterhub_key}} -out /usr/local/jupyterhub/{{jupyterhub_cert}} -batch
+    args: 
+      creates: /usr/local/jupyterhub/{{jupyterhub_key}}
 
-- name: register the python 2 kernel
-  shell: "/usr/local/miniconda/bin/python -m ipykernel install"
+  - name: create jupyterhub supervisord configuration file
+    template: 
+      src: templates/jupyterhub_supervisord.conf.j2 
+      dest: /etc/supervisor/conf.d/jupyterhub_supervisord.conf
+      owner: root 
+      group: root
+    notify: restart supervisor
 
-- name: register the python 3 kernel
-  shell: "/usr/local/miniconda/envs/python35/bin/python -m ipykernel install"
+  - name: register the python 2 kernel
+    shell: "/usr/local/miniconda/bin/python -m ipykernel install"
+
+  - name: register the python 3 kernel
+    shell: "/usr/local/miniconda/envs/python35/bin/python -m ipykernel install"
+
+  tags: configuration
 
 - name: start jupyterhub
   supervisorctl: name=jupyterhub state=started config=/etc/supervisor/supervisord.conf
+  tags: start-service

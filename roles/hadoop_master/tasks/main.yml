@@ -1,11 +1,11 @@
 ---
+- name: format hdfs
+  command: /usr/local/hadoop/bin/hadoop namenode -format -force -nonInteractive
+  when: hdfs_reformat
+  tags: 
+    - start-service
+
 - block:
-  - name: format hdfs (unless it's already been done)
-    command: /usr/local/hadoop/bin/hadoop namenode -format creates=/usr/local/hadoop/ansible-format-hdfs
-
-  - name: touch hfds formatted file (indicates if hdfs has been formatted)
-    file: state=touch path=/usr/local/hadoop/ansible-format-hdfs
-
   - name: stop hadoop (if running)
     command: /usr/local/hadoop/sbin/stop-dfs.sh
 

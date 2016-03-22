@@ -42,3 +42,9 @@
   
   tags:
     - configuration
+
+- name: create the hadoop directory
+  file: path={{ hadoop_tmp_dir }} state=directory owner=hadoop group=hadoop
+  
+
+ 

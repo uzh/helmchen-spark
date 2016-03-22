@@ -1,6 +1,4 @@
 ---
-# necessary steps to configure the role
-  
 - name: add miniconda to the PATH
   vars: 
     superusers:

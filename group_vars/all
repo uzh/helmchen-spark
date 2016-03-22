@@ -48,3 +48,14 @@ core_user_list:
   
 users: ['rok', 'henry']
 
+# HDFS options
+
+# whether to reformat HDFS 
+# be very careful if you set this to true, you probably only want 
+# to do it during the first initialization
+hdfs_reformat: false
+
+# hadoop directory location - this is where all "temporary" data, 
+# such as HDFS blocks, user data, mapreduce temporary data etc. goes
+hadoop_tmp_dir: /hadoop
+
