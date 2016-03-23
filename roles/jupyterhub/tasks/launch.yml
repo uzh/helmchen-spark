@@ -1,0 +1,5 @@
+---
+- name: start jupyterhub
+  supervisorctl: name=jupyterhub state=started config=/etc/supervisor/supervisord.conf
+  tags: start-service
+  

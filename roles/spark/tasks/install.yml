@@ -31,7 +31,9 @@
 
   - name: deploy spark-env.sh configuration
     template: src=templates/spark-env.sh.j2 dest=/usr/local/spark/conf/spark-env.sh owner={{ hadoop_user }} group=hadoop
-    notify: restart spark
+    notify: 
+      - restart spark master
+      - restart spark workers
   
   - name: install findspark
     pip: name=findspark state=present

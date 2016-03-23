@@ -20,7 +20,9 @@
     - common
     - {role: supervisord, tags: supervisor}
     - {role: miniconda, tags: miniconda}
-    - {role: thunder, tags: thunder, environment: {PATH: "/usr/local/miniconda/bin:{{ ansible_env.PATH }}"}}
+    - {role: thunder, 
+       tags: thunder, 
+       environment: {PATH: "/usr/local/miniconda/bin:{{ ansible_env.PATH }}"}}
 
 #
 # Starting up spark, hadoop, and jupyterhub
@@ -39,4 +41,15 @@
   roles:
     - {role: spark, tags: spark}   
     - {role: hadoop, tags: hadoop}
-    - {role: jupyterhub, tags: jupyterhub, become: yes, become_user: root, environment: {PATH: "/usr/local/miniconda/envs/python35/bin:{{ ansible_env.PATH }}"}}
+    
+- name: deploy jupyterhub
+  hosts: spark_masters
+  become: yes
+  become_user: root
+  environment:
+    PATH: "/usr/local/miniconda/envs/python35/bin:{{ ansible_env.PATH }}"
+  tags: jupyterhub
+
+  roles:
+    - jupyterhub
+  

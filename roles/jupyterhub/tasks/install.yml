@@ -1,0 +1,18 @@
+---
+# install jupyterhub
+
+- block:
+  - name: install npm
+    apt: name=npm state=present
+
+  - name: install node-js
+    apt: name=nodejs-legacy state=present
+
+  - name: install http proxy
+    shell: "npm install -g configurable-http-proxy"
+
+  - name: install jupyterhub 
+    pip: name=jupyterhub state=latest executable="/usr/local/miniconda/envs/python35/bin/pip"
+
+  tags: dowloads
+  

@@ -1,3 +1,8 @@
 ---
 - name: restart supervisor
   service: name=supervisor state=restarted
+
+- name: reread supervisor
+  become: yes
+  become_user: root
+  command: /usr/bin/supervisorctl reread

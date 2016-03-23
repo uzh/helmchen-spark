@@ -1,0 +1,31 @@
+---
+- block: 
+  - name: make jupyterhub directory
+    file: path=/usr/local/jupyterhub state=directory owner=root group=root
+
+  - name: create jupyterhub configuration
+    template: dest=/usr/local/jupyterhub/jupyterhub_config.py src=templates/jupyterhub_config.py.j2 owner=root group=root 
+    notify: restart jupyterhub
+
+  - name: make ssl certs
+    shell: openssl req -x509 -nodes -days 365 -newkey rsa:1024 -keyout /usr/local/jupyterhub/{{jupyterhub_key}} -out /usr/local/jupyterhub/{{jupyterhub_cert}} -batch
+    args: 
+      creates: /usr/local/jupyterhub/{{jupyterhub_key}}
+
+  - name: create jupyterhub supervisord configuration file
+    template: 
+      src: templates/jupyterhub_supervisord.conf.j2 
+      dest: /etc/supervisor/conf.d/jupyterhub_supervisord.conf
+      owner: root 
+      group: root
+    notify: 
+      - reread supervisor
+      - restart jupyterhub
+
+  - name: register the python 2 kernel
+    shell: "/usr/local/miniconda/bin/python -m ipykernel install"
+
+  - name: register the python 3 kernel
+    shell: "/usr/local/miniconda/envs/python35/bin/python -m ipykernel install"
+
+  tags: configuration
