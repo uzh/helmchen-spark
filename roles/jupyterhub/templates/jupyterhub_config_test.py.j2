@@ -1,6 +1,0 @@
-
-c.JupyterHub.hub_port = {{ jupyterhub_port }}
-
-c.JupyterHub.ssl_key = '{{ jupyterhub_key }}'
-
-c.Authenticator.admin_users = {{ '{' }}{{ jupyterhub_admin_users | join(',')}}{{ '}' }}
