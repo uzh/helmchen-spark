@@ -5,11 +5,11 @@ The ansible playbooks here enable the deployment of a [Spark](http://spark.apach
 
 The open stack dymamic inventory code presented here is adapted from: https://github.com/lukaspustina/dynamic-inventory-for-ansible-with-openstack
 
-Currently, Spark and Jupyterhub are controlled as services via `supervisord` while standard scripts are used for Hadoop daemons. 
+Currently, `Spark` and `Jupyterhub` are controlled as services via `supervisord` while standard scripts are used for Hadoop daemons. 
 
 ## Preamble
 
-- Create a "management" host from which to run ansible in your OpenStack dashboard and associate a floating IP to is so that you can `ssh` in to it.
+- Create a "management" host from which to run ansible in your OpenStack dashboard
 - `ssh` to the machine you just created.
 - Install the pre-requisites:
 ```
@@ -19,7 +19,7 @@ sudo pip install python-novaclient
 ```
 - Clone this repository:
 ```
-git clone https://github.com/rokroskar/ansible_spark_openstack.git
+git clone https://github.com/uzh/helmchen-spark
 ```
 - Create the `roles/common/files` directory and create passwordless ssh keys there using `ssh-keygen` - these are used for authentication among the nodes: 
 ```
@@ -52,7 +52,7 @@ The `spark-hadoop.yml` ansible playbook runs the necessary roles to deploy the f
 
 ### User accounts
 
-The playbook will automatically create user accounts for list of users specified in the `users` variable in `group_vars/all`. For each user you must  include his/her public key named `<username>.key.pub` in `roles/common/files/user_keys`. These public keys will be injected into their `authorized_key` file. 
+The playbook will automatically create user accounts for list of users specified in the `users` variable in `user_data/user-defines.yml`. For each user you must  include his/her public key named `<username>.key.pub` in `roles/common/files/user_keys`. These public keys will be injected into their `authorized_key` file. 
 
 ### Running the playbook 
 
@@ -104,7 +104,7 @@ This will wipe the hdfs clean, so make sure it's really what you want!
 
 ### Jupyterhub
 
-Jupyterhub requires users to log in using a password. You can set an initial password for each user using a dictionary of `<username> : <password-hash>` stored in `roles/jupyterhub/files/user-data.yml`. To generate the hashed password, run
+Jupyterhub requires users to log in using a password. You can set an initial password for each user using a dictionary of `<username> : <password-hash>` stored in `user_data/user-passwords.yml`. To generate the hashed password, run
 
 ```
 python -c "from passlib.hash import sha512_crypt; import getpass; print sha512_crypt.encrypt(getpass.getpass())"
