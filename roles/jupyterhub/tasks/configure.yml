@@ -22,10 +22,16 @@
       - reread supervisor
       - restart jupyterhub
 
+  - meta: flush_handlers 
+
   - name: register the python 2 kernel
     shell: "/usr/local/miniconda/bin/python -m ipykernel install"
 
   - name: register the python 3 kernel
     shell: "/usr/local/miniconda/envs/python35/bin/python -m ipykernel install"
+
+  - name: inject user passwords
+    user: name={{ item.key }} password={{ item.value }}
+    with_dict: "{{ user_passwords }}"
 
   tags: configuration

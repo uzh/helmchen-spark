@@ -18,7 +18,7 @@
   - name: start spark master
     become: yes
     become_user: root
-    supervisorctl: name=spark_master state=started config=/etc/supervisor/supervisord.conf
+    supervisorctl: name=spark_master state=restarted config=/etc/supervisor/supervisord.conf
     when: inventory_hostname in groups['spark_masters']
 
   - name: start spark slaves

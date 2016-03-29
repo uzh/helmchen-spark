@@ -4,7 +4,7 @@
 - name: copy example notebooks and data
   copy: src=files/thunder_notebooks dest=/home/{{item}} owner={{item}} group=hadoop 
   with_items: 
-    - "{{users}}"
+    - "{{regular_users}}"
 
 - name: install conda dependencies
   conda: name={{item}} state=latest

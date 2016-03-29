@@ -3,7 +3,6 @@
   vars: 
     superusers:
       - root
-    
   become: yes
   become_user: "{{ item }}"
   lineinfile:
@@ -12,9 +11,9 @@
     state: present
   when: miniconda_modify_path
   with_items: 
-    - "{{core_user_list}}"
+    - "{{ core_users }}"
     - "{{ superusers }}"
-    - "{{ users }}"
+    - "{{ regular_users }}"
 
 - name: update packages
   shell: "{{ miniconda_home }}/bin/conda create --yes -q -n {{ item.name }} python={{ item.python_version }} {{ item.pkgs }}"

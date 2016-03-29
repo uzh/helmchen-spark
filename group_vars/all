@@ -42,12 +42,10 @@ hadoop_user: hadoop
 # important when running playbooks remotely
 ansible_user: ubuntu 
 
-core_user_list: 
+core_users:
   - "{{ user }}"
   - "{{ hadoop_user }}"
   
-users: ['rok', 'henry']
-
 # HDFS options
 
 # whether to reformat HDFS 

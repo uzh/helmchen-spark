@@ -1,7 +1,7 @@
 [program:jupyterhub]
 command=/usr/local/miniconda/envs/python35/bin/jupyterhub
 directory={{ jupyterhub_dir }}
-autostart=false
+autostart=true
 stdout_logfile={{ jupyterhub_dir }}/jupyterhub.out
 redirect_stderr=true
 environment=PATH=/usr/local/miniconda/envs/python35/bin/:%(ENV_PATH)s

@@ -1,7 +1,7 @@
 ---
 - block:
   - name: format hdfs
-    command: /usr/bin/hadoop namenode -format -force -nonInteractive
+    command: /usr/local/hadoop/bin/hdfs namenode -format -force -nonInteractive
     become: yes
     become_user: hadoop
     when: hdfs_reformat and inventory_hostname in groups['spark_masters']

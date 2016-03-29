@@ -1,11 +1,11 @@
 [program:spark_master]
 command=/usr/local/spark/bin/spark-class org.apache.spark.deploy.master.Master
 directory=/usr/local/spark
-autostart=false
+autostart=true
 environment: PATH="/usr/local/miniconda/bin:%(ENV_PATH)s"
 
 [program:spark_worker]
 command=/usr/local/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
 directory=/usr/local/spark
-autostart=false
+autostart=true
 environment: PATH="/usr/local/miniconda/bin:%(ENV_PATH)s"

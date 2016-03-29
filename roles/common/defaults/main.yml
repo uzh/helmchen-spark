@@ -1,6 +1,0 @@
----
-users: ['rok', 'henry']
-
-user_passwords:
-  rok: $6$rounds=656000$JMY1jYBcUdOBJjmu$leKiIsU5Who.GfKW2wVdm2l8LulYQrEBe7S1wjUV3/XVUq/osO/e6Vi6ltn/8V/XDPGMVngwHDHU7OxVbQ0xl/
-  henry: $6$rounds=656000$vlVI9AMTowLPY7qL$Q6EMbPfO1PvWdvStucVjMNuXTCdCKvXuwwfIsgR9LEKm0RsgWWpJXAFAhmCMoVXAghvX8MX4NBy9PxMeDFBV6/

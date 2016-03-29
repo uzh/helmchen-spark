@@ -46,7 +46,7 @@
       create=true
     with_items: 
       - "{{ core_user_list }}"
-      - "{{ users }}"
+      - "{{ regular_users }}"
       - "root"
   
   tags: 

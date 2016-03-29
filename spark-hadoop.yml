@@ -6,9 +6,9 @@
   hosts: all
   become: yes
   become_user: root
-  #environment: 
-  #  PATH: "/usr/local/miniconda/bin:{{ (ansible_env|default({})).PATH|default('') }}"
-
+  
+  vars_files: 
+    - user_data/user-defines.yml
   vars:
     ssh_public_key_content: "{{ lookup('file', ssh_public_key ) }}"
    
@@ -37,7 +37,11 @@
   environment:
     PATH: "/usr/local/miniconda/bin:{{ ansible_env.PATH }}"
     PYSPARK_PYTHON: "/usr/local/miniconda/bin/python"
-  
+  vars_files: 
+    - user_data/user-defines.yml
+
+  tags: spark-hadoop
+
   roles:
     - {role: spark, tags: spark}   
     - {role: hadoop, tags: hadoop}
@@ -49,6 +53,10 @@
   environment:
     PATH: "/usr/local/miniconda/envs/python35/bin:{{ ansible_env.PATH }}"
   tags: jupyterhub
+
+  vars_files: 
+    - user_data/user-defines.yml
+    - user_data/user-passwords.yml
 
   roles:
     - jupyterhub
