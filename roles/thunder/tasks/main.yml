@@ -2,7 +2,7 @@
 # install thunder and related packages
 
 - name: copy example notebooks and data
-  copy: src=files/thunder_notebooks dest=/home/{{item}} owner={{item}} group=hadoop 
+  copy: src=example_notebooks dest=/home/{{item}} owner={{item}} group=hadoop 
   with_items: 
     - "{{regular_users}}"
 
