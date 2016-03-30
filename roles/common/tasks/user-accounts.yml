@@ -1,0 +1,49 @@
+---
+# Setup user accounts and ssh keys
+- block: 
+  - name: create hadoop group
+    group: name=hadoop state=present
+
+  - name: create hadoop user
+    user: name={{ hadoop_user }} comment="Hadoop user" group=hadoop shell=/bin/bash
+
+  - name: deploy authorized keys
+    authorized_key: user={{ item }} key="{{ ssh_public_key_content }}"
+    with_items:
+      - "{{ core_users }}"
+
+  - name: deploy ssh-keys
+    copy: src={{ssh_keys_to_use}} dest=/home/{{ item }}/.ssh/
+    with_items:
+      - "{{ core_users }}"
+
+  - name: distribute ssh config
+    template: src=templates/config.j2 dest=/home/{{ item }}/.ssh/config
+    with_items:
+      - "{{ core_users }}"
+
+  - name: create user accounts
+    user: name={{ item }} group=hadoop append=yes shell=/bin/bash
+    with_items: "{{ regular_users }}"
+
+  - name: add hadoop and spark binaries to path for users
+    become: yes
+    become_user: "{{ item }}"
+    lineinfile:
+      dest=/home/{{ item }}/.bashrc 
+      state=present insertafter=EOF 
+      line="export PATH=$PATH:/usr/local/hadoop/bin/:/usr/local/spark/bin/"
+      create=true
+    with_items: 
+      - "{{ core_users }}"
+      - "{{ regular_users }}"
+
+  - name: inject user public keys
+    authorized_key: 
+      user: "{{ item }}"
+      key: "{{ lookup('file', 'roles/common/files/user_keys/{{ item }}.key.pub') }}"
+    with_items: "{{ regular_users }}"
+
+  tags:
+    - user-accounts
+  
