@@ -13,7 +13,7 @@
       dest=/usr/local/
       owner={{ hadoop_user }}
       group=hadoop 
-      creates=/usr/local/spark-{{spark_version}}-bin-hadoop2
+      creates=/usr/local/spark-{{spark_version}}-bin-hadoop2.6
     
   - name: make spark symlink
     file: 
@@ -39,13 +39,15 @@
     pip: name=findspark state=present
 
   - name: add spark environment variables to bashrc
+    become: yes
+    become_user: "{{ item }}"
     lineinfile:
       dest=~/.bashrc 
       state=present insertafter=EOF 
       line="export SPARK_HOME=/usr/local/spark; export PYSPARK_PYTHON=/usr/local/miniconda/bin/python"
       create=true
     with_items: 
-      - "{{ core_user_list }}"
+      - "{{ core_users }}"
       - "{{ regular_users }}"
       - "root"
   
