@@ -9,6 +9,8 @@
   
   vars_files: 
     - user_data/user-defines.yml
+    - user_data/user-passwords.yml 
+    
   vars:
     ssh_public_key_content: "{{ lookup('file', ssh_public_key ) }}"
    
