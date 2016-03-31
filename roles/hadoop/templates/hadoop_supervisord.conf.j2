@@ -1,0 +1,12 @@
+[program:hdfs_namenode]
+command=/usr/local/hadoop/bin/hdfs --conf {{ hadoop_conf_dir }} namenode 
+directory=/usr/local/hadoop
+autostart=true
+user=hadoop
+stdout_logfile=/usr/local/hadoop//jupyterhub.out
+
+[program:hdfs_namenode]
+command=/usr/local/hadoop/bin/hdfs --conf {{ hadoop_conf_dir }} datanode
+directory=/usr/local/hadoop
+autostart=true
+user=hadoop
