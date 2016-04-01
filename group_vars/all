@@ -60,3 +60,27 @@ hadoop_tmp_dir: /hadoop
 # hadoop configuration directory
 hadoop_conf_dir: /usr/local/hadoop/etc/hadoop
 
+# hadoop environment variables
+hadoop_env:
+  HADOOP_LOGFILE: hadoop.log
+  HADOOP_DATANODE_OPTS: -Dhadoop.security.logger=ERROR,RFAS
+  HADOOP_LOG_DIR: /usr/local/hadoop-2.7.2/logs
+  HADOOP_IDENT_STRING: hadoop
+  HADOOP_PREFIX: /usr/local/hadoop-2.7.2
+  HADOOP_POLICYFILE: hadoop-policy.xml
+  HADOOP_COMMON_LIB_JARS_DIR: share/hadoop/common/lib
+  HADOOP_COMMON_LIB_NATIVE_DIR: lib/native
+  HADOOP_HDFS_HOME: /usr/local/hadoop-2.7.2
+  HADOOP_CLIENT_OPTS: -Xmx512m
+  HADOOP_COMMON_HOME: /usr/local/hadoop-2.7.2
+  HADOOP_YARN_HOME: /usr/local/hadoop-2.7.2
+  HADOOP_CLASSPATH: /contrib/capacity-scheduler/*.jar
+  HADOOP_CONF_DIR: /usr/local/hadoop-2.7.2/etc/hadoop
+  HADOOP_PORTMAP_OPTS: -Xmx512m
+  HADOOP_OPTS:  -Djava.net.preferIPv4Stack=true -Dhadoop.log.dir=/usr/local/hadoop-2.7.2/logs -Dhadoop.log.file=hadoop.log -Dhadoop.home.dir=/usr/local/hadoop-2.7.2 -Dhadoop.id.str=hadoop -Dhadoop.root.logger=INFO,console -Djava.library.path=/usr/local/hadoop-2.7.2/lib/native -Dhadoop.policy.file=hadoop-policy.xml -Djava.net.preferIPv4Stack=true
+  HADOOP_COMMON_DIR: share/hadoop/common
+  HADOOP_SECONDARYNAMENODE_OPTS: -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender
+  HADOOP_DEFAULT_PREFIX: /usr/local/hadoop-2.7.2
+  HADOOP_NAMENODE_OPTS: -Dhadoop.security.logger=INFO,RFAS -Dhdfs.audit.logger=INFO,NullAppender
+  HADOOP_MAPRED_HOME: /usr/local/hadoop-2.7.2
+  HADOOP_LOGLEVEL: INFO

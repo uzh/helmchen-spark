@@ -1,14 +1,16 @@
 --- 
-- name: create hadoop supervisord configuration file
+- block: 
+  - name: create hadoop supervisord configuration file
     template: 
       src: templates/hadoop_supervisord.conf.j2 
       dest: /etc/supervisor/conf.d/hadoop_supervisord.conf
       owner: root 
       group: root
     notify: 
-      - reread supervisor
+      - update supervisor 
       
-- block: 
+  - meta: flush_handlers
+
   - name: create configuration directory
     file: path={{ hadoop_conf_dir }} state=directory
 

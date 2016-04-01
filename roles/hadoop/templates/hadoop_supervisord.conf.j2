@@ -1,12 +1,19 @@
+{% if 'spark_masters' in group_names %}
 [program:hdfs_namenode]
-command=/usr/local/hadoop/bin/hdfs --conf {{ hadoop_conf_dir }} namenode 
+command=/usr/local/hadoop/bin/hdfs --config {{ hadoop_conf_dir }} namenode 
 directory=/usr/local/hadoop
 autostart=true
 user=hadoop
-stdout_logfile=/usr/local/hadoop//jupyterhub.out
+stdout_logfile=/usr/local/hadoop/logs/hadoop-hadoop-namenode-{{ ansible_hostname }}.log
+redirect_stderr=true
+{% endif %}
 
-[program:hdfs_namenode]
-command=/usr/local/hadoop/bin/hdfs --conf {{ hadoop_conf_dir }} datanode
+{% if 'spark_slaves' in group_names %}
+[program:hdfs_datanode]
+command=/usr/local/hadoop/bin/hdfs --config {{ hadoop_conf_dir }} datanode
 directory=/usr/local/hadoop
 autostart=true
 user=hadoop
+stdout_logfile=/usr/local/hadoop/logs/hadoop-hadoop-datanode-{{ ansible_hostname }}.log
+redirect_stderr=true
+{% endif %}

@@ -1,11 +1,15 @@
+{% if 'spark_masters' in group_names %}
 [program:spark_master]
 command=/usr/local/spark/bin/spark-class org.apache.spark.deploy.master.Master
 directory=/usr/local/spark
 autostart=true
 environment: PATH="/usr/local/miniconda/bin:%(ENV_PATH)s"
+{% endif %}
 
+{% if 'spark_slaves' in group_names %}
 [program:spark_worker]
 command=/usr/local/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
 directory=/usr/local/spark
 autostart=true
 environment: PATH="/usr/local/miniconda/bin:%(ENV_PATH)s"
+{% endif %}

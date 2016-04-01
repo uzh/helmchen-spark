@@ -19,7 +19,7 @@
       owner: root 
       group: root
     notify: 
-      - reread supervisor
+      - update supervisor
       - restart jupyterhub
 
   - meta: flush_handlers 

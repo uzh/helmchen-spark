@@ -6,21 +6,15 @@
     become_user: hadoop
     when: hdfs_reformat and inventory_hostname in groups['spark_masters']
 
-  # - name: stop hadoop (if running)
-  #   command: /usr/local/hadoop/sbin/stop-dfs.sh
-  #   become: yes
-  #   become_user: hadoop
-  #   when: inventory_hostname in groups['spark_masters']
-
-  # - name: start hadoop
-  #   command: /usr/local/hadoop/sbin/start-dfs.sh
-  #   become: yes
-  #   become_user: hadoop
-  #   when: inventory_hostname in groups['spark_masters']
-    
-  - name: start hadoop
-    supervisorctl: name=hadoop_namenode state=started config=/etc/supervisor/supervisord.conf
+  - name: start hadoop namenode
+    supervisorctl: name=hdfs_namenode state=started config=/etc/supervisor/supervisord.conf
     environment: "{{ hadoop_env }}"
+    when: inventory_hostname in groups['spark_masters']
+
+  - name: start hadoop datanode
+    supervisorctl: name=hdfs_datanode state=started config=/etc/supervisor/supervisord.conf
+    environment: "{{ hadoop_env }}"
+    when: inventory_hostname in groups['spark_slaves']
 
   tags: 
     - start-service
