@@ -2,9 +2,9 @@
 # install thunder and related packages
 
 - name: copy example notebooks and data
-  copy: src=example_notebooks dest=/home/{{item}} owner={{item}} group=hadoop 
+  copy: src=example_notebooks dest=/home/{{item}} owner={{item}} group=hadoop force=no
   with_items: 
-    - "{{regular_users}}"
+    - "{{ regular_users }}"
 
 - name: install conda dependencies
   conda: name={{item}} state=latest
