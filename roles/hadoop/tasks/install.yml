@@ -20,6 +20,9 @@
 
   - name: make hadoop symlink
     file: src=/usr/local/hadoop-{{ hadoop_version }} dest=/usr/local/hadoop owner={{ hadoop_user }} group=hadoop state=link
+
+  - name: make logs directory
+    file: path=/usr/local/hadoop-{{ hadoop_version }}/logs state=directory
     
   tags: 
     - downloads

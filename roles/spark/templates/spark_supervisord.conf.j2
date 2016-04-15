@@ -8,7 +8,7 @@ environment: PATH="/usr/local/miniconda/bin:%(ENV_PATH)s"
 
 {% if 'spark_slaves' in group_names %}
 [program:spark_worker]
-command=/usr/local/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://spark-master:7077
+command=/usr/local/spark/bin/spark-class org.apache.spark.deploy.worker.Worker spark://{{hostvars[groups['spark_masters'][0]].ansible_hostname}}:7077
 directory=/usr/local/spark
 autostart=true
 environment: PATH="/usr/local/miniconda/bin:%(ENV_PATH)s"

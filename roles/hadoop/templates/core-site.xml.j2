@@ -19,7 +19,7 @@
 <configuration>
   <property>
     <name>fs.defaultFS</name>
-    <value>hdfs://spark-master:9000</value>
+    <value>hdfs://{{hostvars[groups['spark_masters'][0]].ansible_hostname}}:9000</value>
   </property>
 
   <property>
@@ -29,7 +29,7 @@
 
   <property>
     <name>fs.default.name</name>
-    <value>hdfs://spark-master:54310</value>
+    <value>hdfs://{{hostvars[groups['spark_masters'][0]].ansible_hostname}}:54310</value>
     <description>The name of the default file system.  A URI whose
     scheme and authority determine the FileSystem implementation.  The
     uri's scheme determines the config property (fs.SCHEME.impl) naming

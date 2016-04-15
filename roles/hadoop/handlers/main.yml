@@ -1,0 +1,12 @@
+---
+- name: restart hadoop namenode
+  become: yes
+  become_user: root
+  supervisorctl: name=hdfs_namenode state=restarted config=/etc/supervisor/supervisord.conf
+  when: inventory_hostname == "{{ groups['spark_masters'][0] }}"
+
+- name: restart hadoop datanode
+  become: yes
+  become_user: root
+  supervisorctl: name=hdfs_datanode state=restarted config=/etc/supervisor/supervisord.conf
+  when: inventory_hostname in groups['spark_slaves']

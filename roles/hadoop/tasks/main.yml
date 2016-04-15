@@ -1,6 +1,9 @@
 ---
 - include: install.yml
 - include: configure.yml
+  notify: 
+    - restart hadoop namenode
+    - restart hadoop datanode 
 - include: launch.yml
 
  
