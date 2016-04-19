@@ -19,13 +19,5 @@
   - name: install cifs-utils
     apt: name=cifs-utils state=present
 
-#  - name: mount remote data store
-#    mount: >
-#            name=/mnt/neurophysiology-storage 
-#            fstype=cifs 
-#            state=mounted 
-#            src=//130.60.51.15/Neurophysiology-Storage2 
-#            opts=rw,username={{smb_password.username}},password={{smb_password.password}}
-
   tags:
     - general
