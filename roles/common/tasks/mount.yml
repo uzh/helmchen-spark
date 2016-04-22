@@ -1,13 +1,19 @@
 ---
 # General tasks
 - block:
-  - name: mount remote data store
+  - name: unmount remote data store
     mount: >
             name=/home/ubuntu/neurophys-storage 
             fstype=cifs 
-            state=mounted 
+            state=unmounted 
             src=//130.60.51.15/Neurophysiology-Storage2 
             opts=rw,uid=henry,gid=hadoop,username={{smb_password.username}},password={{smb_password.password}},file_mode=0770,dir_mode=0770
-
+  - name: mount remote data store
+    mount: >
+            name=/home/ubuntu/neurophys-storage
+            fstype=cifs
+            state=mounted
+            src=//130.60.51.15/Neurophysiology-Storage2
+            opts=rw,uid=henry,gid=hadoop,username={{smb_password.username}},password={{smb_password.password}},file_mode=0770,dir_mode=0770
   tags:
     - mount
