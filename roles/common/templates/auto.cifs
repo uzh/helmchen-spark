@@ -1,0 +1,1 @@
+/home/ubuntu/neurophys-storage -fstype=cifs,rw,uid=henry,gid=hadoop,credentials=/home/ubuntu/.smbcredentials ://130.60.51.15/Neurophysiology-Storage2

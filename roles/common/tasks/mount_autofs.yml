@@ -7,20 +7,18 @@
   # create mount point (optional)
   - name: Create directory
     file: path=/home/ubuntu/neurophys-storage state=directory
-  # add relevant section to master config file
-  - name: Edit master config
-    lineinfile: dest=/etc/auto.master line="/-    /etc/auto.cifs"
+  # copy master config file
+  - name: Copy master config
+    copy: src=~/helmchen-spark/roles/common/templates/auto.master dest=/etc/auto.master owner=root group=root mode=0644
+  # copy cifs config file
+  - name: Copy cifs config
+    copy: src=~/helmchen-spark/roles/common/templates/auto.cifs dest=/etc/auto.cifs owner=root group=root mode=0644
   # create and edit cifs config file
-  - name: Create cifs config file
-    file: path=/etc/auto.cifs state=touch
-  - name: Edit cifs config file
-    lineinfile: dest=/etc/auto.cifs line="/home/ubuntu/neurophys-storage -fstype=cifs,rw,uid=henry,gid=hadoop,credentials=/home/ubuntu/.smbcredentials ://130.60.51.15/Neurophysiology-Storage2"
-  # create and edit the .smbcredentials file
-  # - name: Create credentials file
-  #   file: path=/home/ubuntu/.smbcredentials state=touch
-  # - name: Edit credentials file
-  #   lineinfile: /home/ubuntu/.smbcredentials line="username={{smb_password.username}}"
-  #   lineinfile: /home/ubuntu/.smbcredentials line="password={{smb_password.password}}"
+  # - name: Create cifs config file
+  #   file: path=/etc/auto.cifs state=touch
+  # - name: Edit cifs config file
+  #   lineinfile: dest=/etc/auto.cifs line="/home/ubuntu/neurophys-storage -fstype=cifs,rw,uid=henry,gid=hadoop,credentials=/home/ubuntu/.smbcredentials ://130.60.51.15/Neurophysiology-Storage2"
+  # copy .smbcredentials template and modify
   - name: Copy template credentials file
     copy: src=~/helmchen-spark/roles/common/templates/smbcred_templates dest=/home/ubuntu/.smbcredentials owner=ubuntu group=ubuntu mode=0600
   - name: Replace default user name in templates
@@ -33,7 +31,7 @@
   # start autofs
   - name: Start autofs
     service: name=autofs state=started
-  # reload autofs
+  # reload autofs (in case autofs was already running)
   - name: Reload autofs
     service: name=autofs state=reloaded
   tags:
