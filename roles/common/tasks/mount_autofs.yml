@@ -5,8 +5,8 @@
   - name: install autofs
     apt: name=autofs update_cache=yes
   # create mount point (optional)
-  # - name: Create directory
-    # file: path=/home/ubuntu/neurophys-storage state=directory
+  - name: Create directory
+    file: path=/home/ubuntu/neurophys-storage state=directory
   # add relevant section to master config file
   - name: Edit master config
     lineinfile: dest=/etc/auto.master line="/-    /etc/auto.cifs"
@@ -33,5 +33,8 @@
   # start autofs
   - name: Start autofs
     service: name=autofs state=started
+  # reload autofs
+  - name: Reload autofs
+    service: name=autofs state=reloaded
   tags:
     - autofs
