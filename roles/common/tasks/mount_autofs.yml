@@ -16,15 +16,20 @@
   - name: Edit cifs config file
     lineinfile: dest=/etc/auto.cifs line="/home/ubuntu/neurophys-storage -fstype=cifs,rw,uid=henry,gid=hadoop,credentials=/home/ubuntu/.smbcredentials ://130.60.51.15/Neurophysiology-Storage2"
   # create and edit the .smbcredentials file
-  - name: Create credentials file
-    file: path=/home/ubuntu/.smbcredentials state=touch
-  - name: Edit credentials file
-    lineinfile: /home/ubuntu/.smbcredentials line="username={{smb_password.username}}"
-    lineinfile: /home/ubuntu/.smbcredentials line="password={{smb_password.password}}"
-    lineinfile: /home/ubuntu/.smbcredentials line="domaine=domain_or_workgroupname"
+  # - name: Create credentials file
+  #   file: path=/home/ubuntu/.smbcredentials state=touch
+  # - name: Edit credentials file
+  #   lineinfile: /home/ubuntu/.smbcredentials line="username={{smb_password.username}}"
+  #   lineinfile: /home/ubuntu/.smbcredentials line="password={{smb_password.password}}"
+  - name: Copy template credentials file
+    copy: src=~/helmchen-spark/roles/common/templates/smbcred_templates dest=/home/ubuntu/.smbcredentials owner=ubuntu group=ubuntu mode=0600
+  - name: Replace default user name in templates
+    replace: dest=/home/ubuntu/.smbcredentials regexp='MYUSERNAME' replace={{smb_password.username}}
+  - name: Replace default password in templates
+    replace: dest=/home/ubuntu/.smbcredentials regexp='MYPASSWORD' replace={{smb_password.password}}
   # protect credentials file
-  - name: Change file permissions
-    file: path=/home/ubuntu/.smbcredentials mode=0600
+  # - name: Change file permissions
+  #   file: path=/home/ubuntu/.smbcredentials mode=0600
   # start autofs
   - name: Start autofs
     service: name=autofs state=started
