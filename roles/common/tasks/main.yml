@@ -2,4 +2,4 @@
 - include: general.yml
 - include: user-accounts.yml
 #- include: mount.yml
-
+- include: mount_autofs.yml

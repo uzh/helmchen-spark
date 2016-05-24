@@ -1,0 +1,32 @@
+---
+# Mount external storage using autofs
+- block:
+  # install autofs
+  - name: install autofs
+    apt: name=autofs update_cache=yes
+  # create mount point
+  - name: Create directory
+    file: path=/home/ubuntu/neurophys-storage state=directory
+  # add relevant section to master config file
+  - name: Edit master config
+    lineinfile: dest=/etc/auto.master line="/-    /etc/auto.cifs"
+  # create and edit cifs config file
+  - name: Create cifs config file
+    file: path=/etc/auto.cifs state=touch
+  - name: Edit cifs config file
+    lineinfile: dest=/etc/auto.cifs line="/home/ubuntu/neurophys-storage -fstype=cifs,rw,uid=henry,gid=hadoop,credentials=/home/ubuntu/.smbcredentials ://130.60.51.15/Neurophysiology-Storage2"
+  # create and edit the .smbcredentials file
+  - name: Create credentials file
+    file: path=/home/ubuntu/.smbcredentials state=touch
+  - name: Edit credentials file
+    lineinfile: /home/ubuntu/.smbcredentials line="username={{smb_password.username}}"
+    lineinfile: /home/ubuntu/.smbcredentials line="password={{smb_password.password}}"
+    lineinfile: /home/ubuntu/.smbcredentials line="domaine=domain_or_workgroupname"
+  # protect credentials file
+  - name: Change file permissions
+    file: path=/home/ubuntu/.smbcredentials mode=0600
+  # start autofs
+  - name: Start autofs
+    service: name=autofs state=started
+  tags:
+    - autofs
