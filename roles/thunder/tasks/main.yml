@@ -2,9 +2,12 @@
 # install thunder and related packages
 
 - name: copy example notebooks and data
-  copy: src=example_notebooks dest=/home/{{item}} owner={{item}} group=hadoop force=no
+  copy: src=example_notebooks dest=/home/{{item}} owner={{item}} group=hadoop force=yes
   with_items: 
     - "{{ regular_users }}"
+
+- name: copy example data
+  copy: src=example_data dest=/home/ubuntu owner=ubuntu group=hadoop force=yes
 
 - name: install conda dependencies
   conda: name={{item}} state=latest
@@ -12,3 +15,8 @@
 
 - name: install thunder
   pip: name=thunder-python
+
+- name: install showit
+  pip: name=showit
+
+

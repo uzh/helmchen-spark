@@ -10,3 +10,5 @@ python_libs:
     - matplotlib
     - ipykernel
     - seaborn
+    - h5py
+
