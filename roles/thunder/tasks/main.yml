@@ -1,9 +1,14 @@
 ---
 # install thunder and related packages
 
+#- name: remove old notebooks
+#  shell: rm /home/{{item}}/example_notebooks/*.ipynb
+#  with_items:
+#    - "{{ regular_users }}"
+
 - name: copy example notebooks and data
   copy: src=example_notebooks dest=/home/{{item}} owner={{item}} group=hadoop force=yes
-  with_items: 
+  with_items:
     - "{{ regular_users }}"
 
 - name: copy example data
@@ -13,8 +18,12 @@
   conda: name={{item}} state=latest
   with_items: "{{ python_libs }}"
 
+# required pip installs
 - name: install thunder
   pip: name=thunder-python
+
+- name: install thunder-regression
+  pip: name=thunder-regression
 
 - name: install showit
   pip: name=showit

@@ -7,18 +7,25 @@ def initSpark(nbBackend):
     import findspark # SPARK_HOME needs to be set for import of findspark
     findspark.init()
     import pyspark
-    from pyspark import SparkContext
+    from pyspark import SparkContext, SparkConf
+
+    conf = SparkConf()
 
     if nbBackend == 'local':
-        # start a Spark context - Local machine
+        # options for Spark on local machine
         master = 'local'
     elif nbBackend == 'openstack':
-        # start a Spark context - OpenStack cluster
+        # options for Spark on OpenStack cluster
         master = 'spark://sparkcluster-controller001:7077'
     else:
         print "Backend " + nbBackend + " not known"
+
+    conf.setMaster(master)
+    # configure the max. number of cores a user may request
+    conf.set("spark.cores.max", 4)
+
     try:
-        sc = SparkContext(master=master)
+        sc = SparkContext(conf=conf)
         return sc
     except ValueError as exception:
         print "Could not create SparkContext. Maybe it exists already?"

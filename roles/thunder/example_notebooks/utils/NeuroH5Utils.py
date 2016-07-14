@@ -30,7 +30,9 @@ def readPixel_map(ix, h5file, dim=1, debug=False):
                 result = np.append(result, ImageData[:][ix,:])
             elif dim == 2:
                 result = np.append(result, ImageData[:][:, ix])
-    if debug == True:
+    if dim == 2:
+        result = np.reshape(result, (np.size(result)/len(f), len(f)), order='F')
+    if (debug == True) and dim == 1:
         import pylab as plt
         plt.plot(result); # for debugging in notebook
     f.close()
