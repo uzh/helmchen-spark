@@ -26,6 +26,12 @@
     user: name={{ item }} group=hadoop append=yes shell=/bin/bash
     with_items: "{{ regular_users }}"
 
+  - name: remove old user accounts # make sure these accounts should really be deleted
+    user: name={{ item }} state=absent remove=yes
+    with_items:
+      - user1
+      - user2
+
   - name: add hadoop and spark binaries to path for users
     become: yes
     become_user: "{{ item }}"
