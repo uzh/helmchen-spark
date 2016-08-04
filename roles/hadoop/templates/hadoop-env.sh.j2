@@ -96,3 +96,6 @@ export HADOOP_SECURE_DN_PID_DIR=${HADOOP_PID_DIR}
 
 # A string representing this instance of hadoop. $USER by default.
 export HADOOP_IDENT_STRING=$USER
+
+export HADOOP_CLASSPATH=/usr/local/hadoop/share/hadoop/tools/lib/hadoop-openstack-2.7.2.jar:/usr/local/hadoop/share/hadoop/tools/lib/httpclient-4.2.5.jar:/usr/local/hadoop/share/hadoop/tools/lib/httpcore-4.2.5.jar:$HADOOP_CLASSPATH
+

@@ -52,3 +52,6 @@ export HADOOP_CONF_DIR="{{ hadoop_conf_dir }}/"
 # - SPARK_NICENESS      The scheduling priority for daemons. (Default: 0)
 
 export PYSPARK_PYTHON=/usr/local/miniconda/bin/python
+
+export SPARK_DIST_CLASSPATH=$(/usr/local/hadoop/bin/hadoop classpath)
+export HADOOP_CONF_DIR=/usr/local/hadoop/etc/hadoop

@@ -36,4 +36,50 @@
     the FileSystem implementation class.  The uri's authority is used to
     determine the host, port, etc. for a filesystem.</description>
   </property>
+
+  <property>
+    <name>fs.swift.impl</name>
+    <value>org.apache.hadoop.fs.swift.snative.SwiftNativeFileSystem</value>
+  </property>
+
+  <property>
+    <name>fs.swift.service.SparkTest.auth.url</name>
+    <value>https://cloud.s3it.uzh.ch:5000/v2.0</value>
+  </property>
+
+  <property>
+    <name>fs.swift.service.SparkTest.auth.endpoint.prefix</name>
+    <value>endpoints</value>
+  </property>
+
+  <property>
+    <name>fs.swift.service.SparkTest.http.port</name>
+    <value>8080</value>
+  </property>
+
+  <property>
+    <name>fs.swift.service.SparkTest.region</name>
+    <value>RegionOne</value>
+  </property>
+
+  <property>
+    <name>fs.swift.service.SparkTest.public</name>
+    <value>true</value>
+  </property>
+
+  <property>
+    <name>fs.swift.service.SparkTest.tenant</name>
+    <value>helmchen.hifo.uzh</value>
+  </property>
+
+  <property>
+    <name>fs.swift.service.SparkTest.username</name>
+    <value>hluetc</value>
+  </property>
+
+  <property>
+    <name>fs.swift.service.SparkTest.password</name>
+    <value>password</value>
+  </property>
+
 </configuration>

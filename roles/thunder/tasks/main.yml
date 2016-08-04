@@ -28,4 +28,9 @@
 - name: install showit
   pip: name=showit
 
+- name: install python-swiftclient
+  pip: name=python-swiftclient
+
+- name: install python-keystoneclient
+  pip: name=python-keystoneclient
 
