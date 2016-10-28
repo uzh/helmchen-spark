@@ -19,5 +19,11 @@
   - name: install cifs-utils
     apt: name=cifs-utils state=present
 
+  - name: add apt repository for ffmpeg
+    apt_repository: repo='ppa:mc3man/trusty-media'
+
+  - name: install ffmpeg
+    apt: name=ffmpeg state=present
+
   tags:
     - general

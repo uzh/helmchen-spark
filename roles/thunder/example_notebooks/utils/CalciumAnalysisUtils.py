@@ -1,6 +1,9 @@
 import numpy as np
 
 def psAnalysis(data, stim, frameIx):
+    """
+    Compute peri-stimulus averages for different stims.
+    """
     # figure out unique stims
     stimID = stim[stim>1] # first stim is air, which is ignored
     stimID = np.unique(stimID)
@@ -21,3 +24,14 @@ def psAnalysis(data, stim, frameIx):
         else:
             psDataAllStims.append(psData)
     return psDataAllStims
+
+
+def calculateDff(mov, f0_frames):
+    """
+    Calculate DF/F0 movie
+    dff = ((mov-f0)/f0) * 100
+    """
+    f0 = np.mean(mov[:,:,f0_frames], axis=2)
+    f0 = f0[:, :, np.newaxis]
+    dff = ((mov - f0) / f0) * 100
+    return dff

@@ -34,3 +34,9 @@
 - name: install python-keystoneclient
   pip: name=python-keystoneclient
 
+- name: install Allen SDK
+  pip: name=allensdk version=0.12.0
+
+- name: install bokeh library
+  pip: name=bokeh
+

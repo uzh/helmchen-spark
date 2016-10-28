@@ -11,4 +11,5 @@ python_libs:
     - ipykernel
     - seaborn
     - h5py
+    - pyqt
 
