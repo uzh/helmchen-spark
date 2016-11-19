@@ -122,6 +122,9 @@ jupyterhub: https://spark-master:8000
 
 Note that jupyterhub uses SSL encryption, hence the 'https'.
 
+### License
+
+MIT
 
 
 Acknowledements
