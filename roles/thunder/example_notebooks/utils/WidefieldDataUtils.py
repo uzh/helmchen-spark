@@ -214,6 +214,8 @@ def saveMovie(A, trial_type, movie_id, sample_rate, t_axis, file_params):
     for iFrame in range(A.shape[2]):
         frame =  ax.imshow(A[:,:,iFrame], cmap='jet', animated=True, vmin=vmin, vmax=vmax, interpolation='sinc')
         txt = ax.annotate('%1.2fs' % (t_axis[iFrame]), xy=xy, fontsize=14, color='black', horizontalalignment='right')
+        if iFrame == 0:
+            cbar = plt.colorbar(frame, shrink=0.8, aspect=10)
         ims.append([frame, txt]) # add both the image and the text to the list of artists
 
     ani = animation.ArtistAnimation(fig, ims, interval=(1/sample_rate)*1000, repeat_delay=500, blit=True)

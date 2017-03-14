@@ -14,10 +14,10 @@
   - name: Copy cifs config
     copy: src=~/helmchen-spark/roles/common/templates/auto.cifs dest=/etc/auto.cifs owner=root group=root mode=0644
   # create and edit cifs config file
-  # - name: Create cifs config file
-  #   file: path=/etc/auto.cifs state=touch
-  # - name: Edit cifs config file
-  #   lineinfile: dest=/etc/auto.cifs line="/home/ubuntu/neurophys-storage -fstype=cifs,rw,uid=henry,gid=hadoop,credentials=/home/ubuntu/.smbcredentials ://130.60.51.15/Neurophysiology-Storage2"
+  - name: Create cifs config file
+    file: path=/etc/auto.cifs state=touch
+  - name: Edit cifs config file
+    lineinfile: dest=/etc/auto.cifs line="/home/ubuntu/neurophys-storage -fstype=cifs,rw,uid=henry,gid=hadoop,credentials=/home/ubuntu/.smbcredentials ://130.60.51.15/Neurophysiology-Storage2"
   # copy .smbcredentials template and modify
   - name: Copy template credentials file
     copy: src=~/helmchen-spark/roles/common/templates/smbcred_templates dest=/home/ubuntu/.smbcredentials owner=ubuntu group=ubuntu mode=0600
@@ -26,8 +26,8 @@
   - name: Replace default password in templates
     replace: dest=/home/ubuntu/.smbcredentials regexp='MYPASSWORD' replace={{smb_password.password}}
   # protect credentials file
-  # - name: Change file permissions
-  #   file: path=/home/ubuntu/.smbcredentials mode=0600
+  - name: Change file permissions
+    file: path=/home/ubuntu/.smbcredentials mode=0600
   # start autofs
   - name: Start autofs
     service: name=autofs state=started

@@ -52,6 +52,9 @@ def initSpark(nb_backend, app_name='pyspark', spark_instances=2, executor_cores=
     # configure the memory available per Spark executor
     conf.set("spark.executor.memory", executor_memory)
 
+    # configure the memory available for the driver
+    conf.set("spark.driver.memory", '2G')
+
     if nb_backend == 'openstack':
         conf.set("spark.driver.extraClassPath", "/usr/local/hadoop/share/hadoop/tools/lib/*")
         conf.set("spark.executor.extraClassPath", "/usr/local/hadoop/share/hadoop/tools/lib/*")

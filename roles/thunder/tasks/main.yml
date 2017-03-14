@@ -14,8 +14,12 @@
 - name: copy example data
   copy: src=example_data dest=/home/ubuntu owner=ubuntu group=hadoop force=yes
 
-- name: install conda dependencies
-  conda: name={{item}} state=latest
+#- name: install conda dependencies
+#  conda: name={{item}} state=latest
+#  with_items: "{{ python_libs }}"
+
+- name: install conda dependencies via shell
+  command: conda install -y {{item}}
   with_items: "{{ python_libs }}"
 
 # required pip installs
