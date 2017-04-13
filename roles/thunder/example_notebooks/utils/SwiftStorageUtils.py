@@ -108,7 +108,7 @@ def downloadItems(container, objects, conn_opts, down_opts):
     return status
 
 
-def deleteItems(container, objects, conn_opts):
+def deleteItems(container, objects, conn_opts, print_success=True):
     """
     Delete objects in container without confirmation.
 
@@ -126,15 +126,17 @@ def deleteItems(container, objects, conn_opts):
                 if rd is not None:
                     t = dict(rd.get('headers', {}))
                     if t:
-                        print(
-                            'Successfully deleted {0}/{1} in {2} attempts '
-                            '(transaction id: {3})'.format(c, o, a, t)
-                        )
+                        if print_success:
+                            print(
+                                'Successfully deleted {0}/{1} in {2} attempts '
+                                '(transaction id: {3})'.format(c, o, a, t)
+                            )
                     else:
-                        print(
-                            'Successfully deleted {0}/{1} in {2} '
-                            'attempts'.format(c, o, a)
-                        )
+                        if print_success:
+                            print(
+                                'Successfully deleted {0}/{1} in {2} '
+                                'attempts'.format(c, o, a)
+                            )
 
 
 def deleteExistingFolder(container, folder_name, conn_opts, confirm=True):
@@ -155,7 +157,7 @@ def deleteExistingFolder(container, folder_name, conn_opts, confirm=True):
         else:
             delete_yn = 'Y'
         if delete_yn == 'Y':
-            deleteItems(container, objects_to_delete, conn_opts)
+            deleteItems(container, objects_to_delete, conn_opts, print_success=False)
     else:
         print('No matching objects.')
 

@@ -41,7 +41,7 @@ def initSpark(nb_backend, app_name='pyspark', spark_instances=2, executor_cores=
     conf.setMaster(master)
 
     # configure the number of instances
-    conf.set("spark.executor.instances", spark_instances)
+    # conf.set("spark.executor.instances", spark_instances)
 
     # configure the number of cores per executor
     conf.set("spark.executor.cores", executor_cores)

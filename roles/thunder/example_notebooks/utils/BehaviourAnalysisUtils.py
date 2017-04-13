@@ -1,3 +1,5 @@
+import argparse
+import sys
 import re
 import dateutil.parser as dparser
 
@@ -21,12 +23,14 @@ def parseBehaviourLog(path_to_file, print_table=False):
                 trial = int(parsed[3])
                 descr = parsed[4]
                 if descr.startswith('Begin Trial'):
+                    current_decision = 'Early'
                     trial_count += 1
                     current_trial = trial
                     trial_start = date_time
                 elif descr.startswith('Texture'):
                     current_stim = descr
-                elif descr == 'Go' or descr == 'No Go' or descr == 'Inappropriate Response':
+                elif descr == 'Go' or descr == 'No Go' or descr == 'Inappropriate Response' \
+                or descr == 'No Response':
                     current_decision = descr
                 elif descr == 'End Trial':
                     current_trial_list = [trial_count, current_trial, trial_start, current_stim, current_decision]
@@ -62,6 +66,7 @@ def analyzeBehaviourPerformance(trial_list, stim_decision, print_summary=False):
     corr_reject = 0
     false_alarm = 0
     miss_response = 0
+    early_licks = 0
     go_trials = 0
     nogo_trials = 0
     for i_trial in trial_list:
@@ -72,7 +77,7 @@ def analyzeBehaviourPerformance(trial_list, stim_decision, print_summary=False):
             go_trials += 1
             # correct response
             corr_response += 1
-        if appropriate_decision == 'Go' and current_dec == 'No Go':
+        if appropriate_decision == 'Go' and (current_dec == 'No Go' or current_dec == 'No Response'):
             go_trials += 1
             # missed response
             miss_response += 1
@@ -84,6 +89,8 @@ def analyzeBehaviourPerformance(trial_list, stim_decision, print_summary=False):
             nogo_trials += 1
             # false alarm
             false_alarm += 1
+        if current_dec == 'Early':
+            early_licks += 1
     if print_summary:
         print 'Go trials (%s): %1.0f' % ([a[0] for a in stim_decision if a[1] == 'Go'][0], go_trials)
         print 'No Go trials (%s): %1.0f' % ([a[0] for a in stim_decision if a[1] == 'No Go'][0], nogo_trials)
@@ -91,5 +98,35 @@ def analyzeBehaviourPerformance(trial_list, stim_decision, print_summary=False):
         print 'Correct rejects: %1.0f' % (corr_reject)
         print 'Missed responses: %1.0f' % (miss_response)
         print 'False alarms: %1.0f' % (false_alarm)
+        print 'Early licks: %1.0f' % (early_licks)
 
     return (go_trials, nogo_trials, corr_response, corr_reject, miss_response, false_alarm)
+
+
+def parseCommandLineArgs(args):
+    '''
+    Parse command line arguments. Return full path to logfile and stim-decision list
+    '''
+    path_to_logfile = args[1]
+    stim_decision_list = args[2:]
+    stim_decision = []
+    for ix in range(0,len(stim_decision_list),2):
+        stim_decision.append([stim_decision_list[ix], stim_decision_list[ix+1]])
+    return (path_to_logfile, stim_decision)
+
+
+if __name__ == '__main__':
+    '''
+    If executed from the command line, parse the specified log file and print output.
+
+    Example usage:
+    python BehaviourAnalysisUtils.py /Path/to/logfile.txt 'Stim 1' 'Dec 1' 'Stim 2' 'Dec 2'
+    '''
+    args = sys.argv
+    if len(args) > 3:
+        path_to_logfile, stim_decision = parseCommandLineArgs(args)
+    else:
+        print("Specify full path to log file and a list of stimulus - decisions!")
+        exit()
+    trial_list = parseBehaviourLog(path_to_logfile, print_table=True)
+    analyzeBehaviourPerformance(trial_list, stim_decision, print_summary=True)
