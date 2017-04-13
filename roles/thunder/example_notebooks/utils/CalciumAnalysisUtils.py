@@ -33,5 +33,5 @@ def calculateDff(mov, f0_frames):
     """
     f0 = np.mean(mov[:,:,f0_frames], axis=2)
     f0 = f0[:, :, np.newaxis]
-    dff = ((mov - f0) / f0) * 100
+    dff = ((mov - f0) / f0)
     return dff

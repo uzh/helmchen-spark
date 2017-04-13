@@ -170,16 +170,25 @@ def saveAsH5(A, file_name, dataset_name, swift_folder, conn_opts):
     """
     # create a temporary directory
     temp_dir = tempfile.mkdtemp()
-
-    h5file = '%s%s.h5' % (temp_dir, file_name)
+    if temp_dir.endswith(os.path.sep):
+        pass
+    else:
+        temp_dir = temp_dir + os.path.sep
+    
+    if file_name.endswith('.h5'):
+        # h5file = '%s%s' % (temp_dir, file_name)
+        h5file = os.path.join(temp_dir, file_name)
+    else:
+        h5file = '%s%s.h5' % (temp_dir, file_name)
+        h5file = os.path.join(temp_dir, file_name + '.h5')
     print('Saving file %s' % (h5file), end="")
     with h5py.File(h5file, 'w') as hf:
         hf.create_dataset(dataset_name, data=A, compression="gzip")
     print(' - Done')
     # upload file to Swift container
-    print('Uploading file %s' % (h5file), end="")
+    print('Uploading file %s' % (h5file))
     uploadItems(conn_opts['swift_container'], swift_folder, temp_dir, [h5file], conn_opts)
-    print(' - Done')
+    print('Done')
 
     # delete temp dir
     shutil.rmtree(temp_dir)
@@ -200,9 +209,18 @@ def saveAsMat(A, file_name, dataset_name, swift_folder, conn_opts, trial_list=No
         # figure out trial ID and condition
         trial_id = int(file_name[file_name.rfind('_')+1:])
         trial_stim = [a for a in trial_list if a[0] == trial_id][0][3]
+        
+        # find trial number based on trials of this type
+        count_by_trial = 0
+        trial_stim = [a for a in trial_list if a[0] == trial_id][0][3]
+        for i_trial in trial_list:
+            if i_trial[3] == trial_stim:
+                count_by_trial += 1
+            if i_trial[0] == trial_id:
+                break
 
         # this makes up the mat-file name
-        matfile_name = 'cond_%s_trial%1.0f.mat' % (trial_stim[trial_stim.rfind(' ')+1:], trial_id)
+        matfile_name = 'cond_%s_trial%1.0f.mat' % (trial_stim[trial_stim.rfind(' ')+2:], count_by_trial)
     else:
         matfile_name = file_name
     
@@ -217,7 +235,7 @@ def saveAsMat(A, file_name, dataset_name, swift_folder, conn_opts, trial_list=No
     var_dict[dataset_name] = A
     
     # save mat-file to temp dir
-    savemat(matfile, var_dict)
+    savemat(matfile, var_dict, do_compression=True)
     
     # upload file to Swift container
     # print('Uploading file %s' % (matfile), end="")
