@@ -3,7 +3,8 @@
 hadoop_version: 2.7.2
 
 # spark version 
-spark_version: 1.6.1
+spark_version: 2.1.1
+# spark_version: 1.6.1
 
 # Set to absent to take down machines
 instance_state: present
