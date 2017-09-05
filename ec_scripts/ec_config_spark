@@ -347,7 +347,7 @@ image_id=416a5145-da46-4284-b0e9-ebad43b3942a
 
 flavor=8cpu-32ram-hpc
 controller_nodes=1
-worker_nodes=2
+worker_nodes=1
 image_userdata=
 ssh_to=controller
 
