@@ -5,5 +5,6 @@ files
 user_data
 example_data
 *core-site.xml.*
+.ipynb_checkpoints
 
 
